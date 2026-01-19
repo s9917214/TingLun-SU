@@ -85,7 +85,7 @@ Verify all three video types load correctly:
 ## Common Customization Tasks
 
 ### Changing Personal Information
-1. Search `index.html` for placeholder text (e.g., "張同學", "your.email@example.com")
+1. Search `index.html` for placeholder text (e.g., "蘇挺綸", "s9917214@gmail.com")
 2. Replace with actual information
 3. Update statistics in `.stat-value` elements
 
