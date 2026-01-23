@@ -591,9 +591,9 @@ async function detectPhotos(folder, year) {
     for (let i = 1; i <= 8; i++) {
         let found = false;
 
-        // 尝试不同的命名模式和扩展名
+        // 尝试不同的命名模式和扩展名（优先 WebP）
         for (const pattern of patterns) {
-            for (const ext of ['jpg', 'jpeg', 'png', 'webp']) {
+            for (const ext of ['webp', 'jpg', 'jpeg', 'png']) {
                 const photoPath = `images/${folder}/${pattern}${i}.${ext}`;
 
                 try {
@@ -629,8 +629,8 @@ function checkImageExists(url) {
         img.onerror = () => resolve(false);
         img.src = url;
 
-        // 设置超时
-        setTimeout(() => resolve(false), 2000);
+        // 设置超时（优化为 500ms）
+        setTimeout(() => resolve(false), 500);
     });
 }
 
@@ -791,8 +791,6 @@ async function initPhotoGalleries() {
 
 // 页面加载完成后初始化照片画廊
 document.addEventListener('DOMContentLoaded', () => {
-    // 延迟初始化，确保DOM完全加载
-    setTimeout(() => {
-        initPhotoGalleries();
-    }, 300);
+    // 立即初始化照片画廊
+    initPhotoGalleries();
 });
