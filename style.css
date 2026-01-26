@@ -1782,41 +1782,29 @@ button,
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
-/* ==================== 照片懶加載優化 ==================== */
-img.lazy-load {
-    background: linear-gradient(110deg, #f0f0f0 8%, #f8f8f8 18%, #f0f0f0 33%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s linear infinite;
-    min-height: 200px;
-    transition: opacity 0.5s ease-in-out;
-}
-
-img.lazy-load:not([src]) {
-    opacity: 0.6;
-}
-
-img.lazy-load.loaded {
-    animation: none;
-    background: none;
-    opacity: 1;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: -200% 0;
-    }
-    100% {
-        background-position: 200% 0;
-    }
-}
-
+/* ==================== 照片載入優化 ==================== */
 /* 照片容器優化 */
 .photo-grid,
 .photo-grid-two,
 .photo-grid-four,
 .photo-carousel {
-    will-change: transform;
     contain: layout style paint;
+}
+
+/* 為所有獎項照片添加淡入效果 */
+.award-img,
+.grid-img,
+.grid-img-two,
+.grid-img-four,
+.carousel-img {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
 }
 
 /* 減少輪播圖記憶體使用 */

@@ -698,7 +698,7 @@ function checkImageExists(url) {
  */
 function generateSingleLayout(photos, caption, year) {
     return `
-        <img data-src="${photos[0]}" alt="${year} Award Photo" class="award-img lazy-load" loading="lazy">
+        <img src="${photos[0]}" alt="${year} Award Photo" class="award-img" loading="lazy">
         <p class="photo-caption">${caption}</p>
     `;
 }
@@ -709,8 +709,8 @@ function generateSingleLayout(photos, caption, year) {
 function generateTwoPhotoLayout(photos, caption, year) {
     return `
         <div class="photo-grid-two">
-            <img data-src="${photos[0]}" alt="${year} Award Photo 1" class="grid-img-two lazy-load" loading="lazy">
-            <img data-src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img-two lazy-load" loading="lazy">
+            <img src="${photos[0]}" alt="${year} Award Photo 1" class="grid-img-two" loading="lazy">
+            <img src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img-two" loading="lazy">
         </div>
         <p class="photo-caption">${caption}</p>
     `;
@@ -722,10 +722,10 @@ function generateTwoPhotoLayout(photos, caption, year) {
 function generateCollageLayout(photos, caption, year) {
     return `
         <div class="photo-grid">
-            <img data-src="${photos[0]}" alt="${year} Award Main Photo" class="grid-img main lazy-load" loading="lazy">
+            <img src="${photos[0]}" alt="${year} Award Main Photo" class="grid-img main" loading="lazy">
             <div class="grid-side">
-                <img data-src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img lazy-load" loading="lazy">
-                <img data-src="${photos[2]}" alt="${year} Award Photo 3" class="grid-img lazy-load" loading="lazy">
+                <img src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img" loading="lazy">
+                <img src="${photos[2]}" alt="${year} Award Photo 3" class="grid-img" loading="lazy">
             </div>
         </div>
         <p class="photo-caption">${caption}</p>
@@ -738,10 +738,10 @@ function generateCollageLayout(photos, caption, year) {
 function generateGridLayout(photos, caption, year) {
     return `
         <div class="photo-grid-four">
-            <img data-src="${photos[0]}" alt="${year} Award Photo 1" class="grid-img-four lazy-load" loading="lazy">
-            <img data-src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img-four lazy-load" loading="lazy">
-            <img data-src="${photos[2]}" alt="${year} Award Photo 3" class="grid-img-four lazy-load" loading="lazy">
-            <img data-src="${photos[3]}" alt="${year} Award Photo 4" class="grid-img-four lazy-load" loading="lazy">
+            <img src="${photos[0]}" alt="${year} Award Photo 1" class="grid-img-four" loading="lazy">
+            <img src="${photos[1]}" alt="${year} Award Photo 2" class="grid-img-four" loading="lazy">
+            <img src="${photos[2]}" alt="${year} Award Photo 3" class="grid-img-four" loading="lazy">
+            <img src="${photos[3]}" alt="${year} Award Photo 4" class="grid-img-four" loading="lazy">
         </div>
         <p class="photo-caption">${caption}</p>
     `;
@@ -752,7 +752,7 @@ function generateGridLayout(photos, caption, year) {
  */
 function generateCarouselLayout(photos, caption, year) {
     const imagesHTML = photos.map((photo, index) =>
-        `<img data-src="${photo}" alt="${year} Award Photo ${index + 1}" class="carousel-img lazy-load ${index === 0 ? 'active' : ''}" loading="lazy">`
+        `<img src="${photo}" alt="${year} Award Photo ${index + 1}" class="carousel-img ${index === 0 ? 'active' : ''}" loading="lazy">`
     ).join('');
 
     const dotsHTML = photos.map((_, index) =>
@@ -884,43 +884,4 @@ function initializePage() {
     if (quickStats) {
         statsObserver.observe(quickStats);
     }
-
-    // 初始化懶加載觀察器
-    initLazyLoading();
-}
-
-// ==================== 照片懶加載功能 ====================
-function initLazyLoading() {
-    const lazyLoadObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                const src = img.getAttribute('data-src');
-
-                if (src) {
-                    // 創建臨時圖片對象預載入
-                    const tempImg = new Image();
-                    tempImg.onload = () => {
-                        img.src = src;
-                        img.classList.add('loaded');
-                        img.removeAttribute('data-src');
-                    };
-                    tempImg.src = src;
-                }
-
-                observer.unobserve(img);
-            }
-        });
-    }, {
-        rootMargin: '50px', // 提前50px開始載入
-        threshold: 0.01
-    });
-
-    // 觀察所有懶加載圖片
-    setTimeout(() => {
-        const lazyImages = document.querySelectorAll('img.lazy-load[data-src]');
-        lazyImages.forEach(img => {
-            lazyLoadObserver.observe(img);
-        });
-    }, 100); // 延遲100ms確保DOM已更新
 }
