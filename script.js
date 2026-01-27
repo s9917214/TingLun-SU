@@ -195,6 +195,7 @@ window.onYouTubeIframeAPIReady = function() {
     playerDivs.forEach(playerDiv => {
         const videoId = playerDiv.dataset.videoId;
         const playerId = playerDiv.id;
+        const startTime = parseInt(playerDiv.dataset.start) || 0; // 讀取開始時間（秒），預設為 0
 
         const player = new YT.Player(playerId, {
             height: '100%',
@@ -206,6 +207,7 @@ window.onYouTubeIframeAPIReady = function() {
                 'controls': 0,
                 'loop': 1,
                 'playlist': videoId, // loop需要playlist
+                'start': startTime, // 設定開始時間
                 'modestbranding': 1,
                 'showinfo': 0,
                 'rel': 0
@@ -445,8 +447,8 @@ document.addEventListener('keydown', (e) => {
         }
     }
 
-    // 數字鍵快速導航（1-6）
-    if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey) {
+    // 數字鍵快速導航（1-8）
+    if (e.key >= '1' && e.key <= '8' && !e.ctrlKey && !e.metaKey) {
         const index = parseInt(e.key) - 1;
         const links = Array.from(navLinks);
         if (links[index]) {
@@ -521,7 +523,7 @@ console.log('• Responsive Design');
 console.log('• Intersection Observer API');
 console.log('• Web Accessibility (WCAG)');
 console.log('\n💡 Keyboard Shortcuts:');
-console.log('• Press 1-6 to navigate between sections');
+console.log('• Press 1-8 to navigate between sections');
 console.log('• Press ESC to close mobile menu');
 console.log('\n🔗 Source: https://github.com/yourusername');
 
