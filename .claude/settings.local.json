@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(where:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(xelatex:*)",
+      "Bash(pdflatex:*)",
+      "Bash(cmd /c:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(where.exe:*)",
+      "Bash(test:*)",
+      "Bash(\"$LOCALAPPDATA/Programs/MiKTeX/miktex/bin/x64/pdflatex.exe\":*)",
+      "Bash(ls:*)"
     ]
   }
 }

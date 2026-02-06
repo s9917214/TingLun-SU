@@ -420,6 +420,14 @@ body {
     text-decoration: underline;
 }
 
+/* CV Download Buttons Container */
+.cv-download-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
 .btn-download-cv {
     display: flex;
     align-items: center;
@@ -439,6 +447,14 @@ body {
     background: var(--color-accent-dark);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+}
+
+.btn-download-formal {
+    background: var(--color-primary);
+}
+
+.btn-download-formal:hover {
+    background: #0f3a5f;
 }
 
 /* ==================== Section 通用樣式 ==================== */
@@ -1665,16 +1681,17 @@ body {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 8px;
     overflow: hidden;
+    padding: 8px;
 }
 
 .exchange-photos-dual img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.3s;
 }
 
@@ -1851,6 +1868,11 @@ body {
 
     .quick-stats {
         grid-template-columns: 1fr;
+    }
+
+    .cv-download-buttons {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
 
     .publication-item {
