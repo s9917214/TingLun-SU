@@ -2028,10 +2028,31 @@ button,
 }
 
 .unmute-button svg {
-    width: 40px; /* 縮小圖示 */
-    height: 40px; /* 縮小圖示 */
+    width: 40px;
+    height: 40px;
     color: white;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* 速度控制按鈕 */
+.speed-button {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 15;
+    transition: background 0.2s ease;
+    user-select: none;
+}
+
+.speed-button:hover {
+    background: rgba(0, 0, 0, 0.9);
 }
 
 /* ==================== 照片載入優化 ==================== */

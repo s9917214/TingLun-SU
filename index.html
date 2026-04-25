@@ -25,6 +25,24 @@
 
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Skip Link for Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-primary, #1a1a1a);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: 600;
+            z-index: 10000;
+            border-radius: 0 0 4px 0;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
         /* Research Projects 互動樣式 - 展開更多細節 */
         .project-details-expandable {
             display: none;
@@ -35,7 +53,7 @@
 
         .research-project.details-expanded .project-details-expandable {
             display: flex;
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeIn 0.25s ease-out forwards; /* 優化至 250ms */
         }
 
         .btn-expand-details {
@@ -53,7 +71,8 @@
             justify-content: center;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s ease;
+            /* 優化效能：具體指定屬性，縮短時長至 200ms */
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
 
         .btn-expand-details:hover {
@@ -69,7 +88,7 @@
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
             border-top: 6px solid currentColor;
-            transition: transform 0.3s ease;
+            transition: transform 0.2s ease-out; /* 優化至 200ms */
         }
 
         .research-project.details-expanded .btn-expand-details .arrow {
@@ -89,9 +108,39 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* 尊重使用者減少動畫偏好設定 - Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .research-project.details-expanded .project-details-expandable {
+                animation: none;
+            }
+
+            .btn-expand-details,
+            .btn-expand-details .arrow {
+                transition: none;
+            }
+
+            @keyframes fadeIn {
+                from, to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#overview" class="skip-link">跳至主要內容 Skip to main content</a>
+
     <!-- 頂部資訊欄 -->
     <div class="top-bar">
         <div class="container">
@@ -119,7 +168,7 @@
                     <li><a href="#laboratory" data-lang-key="nav-laboratory">Laboratory</a></li>
                     <li><a href="#contact" data-lang-key="nav-contact">Contact</a></li>
                 </ul>
-                <button class="menu-toggle">
+                <button class="menu-toggle" aria-label="開啟導航選單 Open navigation menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -146,7 +195,11 @@
                     </div>
 
                     <div class="academic-goal">
-                        <div class="goal-icon">🎓</div>
+                        <div class="goal-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                            </svg>
+                        </div>
                         <div class="goal-content">
                             <h4 data-lang-key="overview-goal-title">Academic Objective</h4>
                             <p data-lang-key="overview-goal-p">Pursuing Master's degree in Mechanical Engineering / Automation Engineering to advance research in AI-driven robotics, intelligent manufacturing systems, and the integration of LLM applications with industrial automation.</p>
@@ -155,28 +208,46 @@
 
                     <div class="quick-stats">
                         <div class="stat-item">
-                            <div class="stat-icon">📊</div>
+                            <div class="stat-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3 13h2v8H3v-8zm4-8h2v16H7V5zm4 10h2v6h-2v-6zm4-6h2v12h-2V9zm4 4h2v8h-2v-8z"/>
+                                </svg>
+                            </div>
                             <div class="stat-data">
                                 <span class="stat-value">6</span>
                                 <span class="stat-label" data-lang-key="overview-stat-1">Industry Projects</span>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-icon">🏆</div>
+                            <div class="stat-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M7 21h10V8l-5-5-5 5v13zm5-16.5l3.5 3.5v11h-7v-11l3.5-3.5z"/>
+                                    <path d="M12 2l7 7v12H5V9l7-7zm0 3.5L8.5 9v10h7V9L12 5.5z"/>
+                                </svg>
+                            </div>
                             <div class="stat-data">
                                 <span class="stat-value">15+</span>
                                 <span class="stat-label" data-lang-key="overview-stat-2">Awards & Honors</span>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-icon">📝</div>
+                            <div class="stat-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+                                    <path d="M8 15h8v2H8v-2zm0-4h8v2H8v-2zm0-4h5v2H8V7z"/>
+                                </svg>
+                            </div>
                             <div class="stat-data">
                                 <span class="stat-value">5</span>
                                 <span class="stat-label" data-lang-key="overview-stat-3">Publications & Seminar</span>
                             </div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-icon">💡</div>
+                            <div class="stat-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"/>
+                                </svg>
+                            </div>
                             <div class="stat-data">
                                 <span class="stat-value">2</span>
                                 <span class="stat-label" data-lang-key="overview-stat-4">Patents</span>
@@ -188,7 +259,7 @@
                 <div class="overview-sidebar">
                     <div class="profile-card">
                         <div class="profile-image">
-                            <img src="images/profile.jpg" alt="Ting-Lun Su Profile Photo" class="profile-photo" loading="eager">
+                            <img src="images/profile.jpg" alt="Ting-Lun Su Profile Photo" class="profile-photo" width="300" height="300" loading="eager">
                         </div>
 
                         <div class="contact-info">
@@ -248,7 +319,11 @@
                     <div class="award-content-wrapper">
                         <div class="awards-list">
                             <article class="award-card-compact highlight">
-                                <div class="award-medal-small">🥈</div>
+                                <div class="award-medal-small">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#C0C0C0">
+                                        <path d="M12 2l2.09 6.26L20 9.27l-5.45 4.73L16 20l-4-3-4 3 1.45-6-5.45-4.73 5.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
                                 <div class="award-info">
                                     <h4 class="award-title-compact" data-lang-key="award-2025-1-title">National Vocational and Technical College Student Practical Project Competition</h4>
                                     <span class="award-badge second" data-lang-key="award-2025-1-badge">Second Place</span>
@@ -256,7 +331,11 @@
                                 </div>
                             </article>
                             <article class="award-card-compact highlight">
-                                <div class="award-medal-small">🏆</div>
+                                <div class="award-medal-small">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFD700">
+                                        <path d="M12 2l2.09 6.26L20 9.27l-5.45 4.73L16 20l-4-3-4 3 1.45-6-5.45-4.73 5.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
                                 <div class="award-info">
                                     <h4 class="award-title-compact" data-lang-key="award-2025-2-title">Taiwan Society of Precision Engineering's 114th Precision Engineering Award</h4>
                                     <span class="award-badge mention" data-lang-key="award-2025-2-badge">Honorable Mention</span>
@@ -266,10 +345,10 @@
                         <div class="award-photo">
                             <!-- 2025: 4 photos - Grid Layout (2x2) -->
                             <div class="photo-grid-four">
-                                <img src="images/awards/2025/award1.jpg" alt="2025 Award Photo 1" class="grid-img-four" loading="lazy">
-                                <img src="images/awards/2025/award2.jpg" alt="2025 Award Photo 2" class="grid-img-four" loading="lazy">
-                                <img src="images/awards/2025/award3.jpg" alt="2025 Award Photo 3" class="grid-img-four" loading="lazy">
-                                <img src="images/awards/2025/award4.jpg" alt="2025 Award Photo 4" class="grid-img-four" loading="lazy">
+                                <img src="images/awards/2025/award1.jpg" alt="2025 Award Photo 1" class="grid-img-four" width="400" height="300" loading="lazy">
+                                <img src="images/awards/2025/award2.jpg" alt="2025 Award Photo 2" class="grid-img-four" width="400" height="300" loading="lazy">
+                                <img src="images/awards/2025/award3.jpg" alt="2025 Award Photo 3" class="grid-img-four" width="400" height="300" loading="lazy">
+                                <img src="images/awards/2025/award4.jpg" alt="2025 Award Photo 4" class="grid-img-four" width="400" height="300" loading="lazy">
                             </div>
                             <p class="photo-caption" data-lang-key="award-2025-caption">National Competition Award Ceremony 2025</p>
                         </div>
@@ -316,10 +395,10 @@
                         <div class="award-photo">
                             <!-- 2024: 3 photos - Collage Layout (1 large + 2 small) -->
                             <div class="photo-grid">
-                                <img src="images/awards/2024/award1.jpg" alt="2024 Award Main Photo" class="grid-img main" loading="lazy">
+                                <img src="images/awards/2024/award1.jpg" alt="2024 Award Main Photo" class="grid-img main" width="600" height="450" loading="lazy">
                                 <div class="grid-side">
-                                    <img src="images/awards/2024/award2.jpg" alt="2024 Award Photo 2" class="grid-img" loading="lazy">
-                                    <img src="images/awards/2024/award3.jpg" alt="2024 Award Photo 3" class="grid-img" loading="lazy">
+                                    <img src="images/awards/2024/award2.jpg" alt="2024 Award Photo 2" class="grid-img" width="300" height="225" loading="lazy">
+                                    <img src="images/awards/2024/award3.jpg" alt="2024 Award Photo 3" class="grid-img" width="300" height="225" loading="lazy">
                                 </div>
                             </div>
                             <p class="photo-caption" data-lang-key="award-2024-caption">2024 Intelligent Automation Excellence Year</p>
@@ -342,7 +421,7 @@
                         </div>
                         <div class="award-photo">
                             <!-- 2023: 1 photo - Single Layout -->
-                            <img src="images/awards/2023/award1.jpg" alt="2023 Award Photo" class="award-img" loading="lazy">
+                            <img src="images/awards/2023/award1.jpg" alt="2023 Award Photo" class="award-img" width="800" height="600" loading="lazy">
                             <p class="photo-caption" data-lang-key="award-2023-caption">27th TDK Cup Award Ceremony</p>
                         </div>
                     </div>
@@ -372,10 +451,10 @@
                         <div class="award-photo">
                             <!-- Early: 3 photos - Collage Layout (1 large + 2 small) -->
                             <div class="photo-grid">
-                                <img src="images/awards/early/award1.jpg" alt="Early Award Main Photo" class="grid-img main" loading="lazy">
+                                <img src="images/awards/early/award1.jpg" alt="Early Award Main Photo" class="grid-img main" width="600" height="450" loading="lazy">
                                 <div class="grid-side">
-                                    <img src="images/awards/early/award2.jpg" alt="Early Award Photo 2" class="grid-img" loading="lazy">
-                                    <img src="images/awards/early/award3.jpg" alt="Early Award Photo 3" class="grid-img" loading="lazy">
+                                    <img src="images/awards/early/award2.jpg" alt="Early Award Photo 2" class="grid-img" width="300" height="225" loading="lazy">
+                                    <img src="images/awards/early/award3.jpg" alt="Early Award Photo 3" class="grid-img" width="300" height="225" loading="lazy">
                                 </div>
                             </div>
                             <p class="photo-caption" data-lang-key="award-early-caption">National Science Fair Competitions 2020-2022</p>
@@ -403,7 +482,7 @@
                         <span class="project-role role-leader" data-lang-key="research-role-leader">Project Leader</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-1-title">Visual Measurement Inspection Station and Generative AI Navigation Assistance System</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/TURVO.png" alt="TURVO Logo" class="company-logo"><span data-lang-key="research-1-company">TURVO INTERNATIONAL CO., LTD.</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/TURVO.png" alt="TURVO Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-1-company">TURVO INTERNATIONAL CO., LTD.</span></p>
                 </div>
 
                 <div class="project-body">
@@ -465,7 +544,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -482,7 +561,7 @@
                         <span class="project-role role-leader" data-lang-key="research-role-leader">Project Leader</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-2-title">Smart CNC Flexible Manufacturing Factory (Phase 1, 2 & 3)</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/IC_STAR.png" alt="IC STAR Logo" class="company-logo"><span data-lang-key="research-2-company">IC STAR INDUSTRIAL CO., LTD.</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/IC_STAR.png" alt="IC STAR Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-2-company">IC STAR INDUSTRIAL CO., LTD.</span></p>
                 </div>
 
                 <div class="project-body">
@@ -553,7 +632,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -570,7 +649,7 @@
                         <span class="project-role role-leader" data-lang-key="research-role-leader">Project Leader</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-3-title">Automated Robot Arm Forging Spraying System with AI-Based Path Generation</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/IC_STAR.png" alt="IC STAR Logo" class="company-logo"><span data-lang-key="research-3-company">IC STAR INDUSTRIAL CO., LTD.</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/IC_STAR.png" alt="IC STAR Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-3-company">IC STAR INDUSTRIAL CO., LTD.</span></p>
                 </div>
 
                 <div class="project-body">
@@ -637,7 +716,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -654,12 +733,12 @@
                         <span class="project-role role-member" data-lang-key="research-role-member">Plan member</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-4-title">Automatic CNC Chip Entanglement Detection System</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/ITRI.png" alt="ITRI Logo" class="company-logo"><span data-lang-key="research-4-company">Industrial Technology Research Institute (ITRI)</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/ITRI.png" alt="ITRI Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-4-company">Industrial Technology Research Institute (ITRI)</span></p>
                 </div>
 
                 <div class="project-body">
                     <div class="project-video-container">
-                        <img src="images/detection.png" alt="Automatic CNC Chip Entanglement Detection System" style="width: 100%; height: auto; border-radius: 8px;">
+                        <img src="images/detection.png" alt="Automatic CNC Chip Entanglement Detection System" width="800" height="600" style="width: 100%; height: auto; border-radius: 8px;">
                         <p class="video-caption" data-lang-key="research-4-fig">Figure 4: YOLO-based real-time chip entanglement detection in CNC operations</p>
                     </div>
 
@@ -713,7 +792,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -730,7 +809,7 @@
                         <span class="project-role role-member" data-lang-key="research-role-member">Plan member</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-5-title">Development and Commercialization of Automatic Mushroom Stem-Cutting System</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/USR.png" alt="USR Logo" class="company-logo"><span data-lang-key="research-5-company">University Social Responsibility Project with Local Farmers</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/USR.png" alt="USR Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-5-company">University Social Responsibility Project with Local Farmers</span></p>
                 </div>
 
                 <div class="project-body">
@@ -798,7 +877,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -815,7 +894,7 @@
                         <span class="project-role role-leader" data-lang-key="research-role-leader">Project Leader</span>
                     </div>
                     <h3 class="project-title" data-lang-key="research-6-title">3D Vision-Guided Picking and Robotic System Integration Development</h3>
-                <p class="project-subtitle"><img src="images/Company_logo/LIEBHERR.png" alt="LIEBHERR Logo" class="company-logo"><span data-lang-key="research-6-company">LIEBHERR-Verzahntechnik GmbH & PONGI Gear Expert CO., LTD.</span></p>
+                <p class="project-subtitle"><img src="images/Company_logo/LIEBHERR.png" alt="LIEBHERR Logo" class="company-logo" width="120" height="30"><span data-lang-key="research-6-company">LIEBHERR-Verzahntechnik GmbH & PONGI Gear Expert CO., LTD.</span></p>
                 </div>
 
                 <div class="project-body">
@@ -874,7 +953,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-expand-details">
+                        <button class="btn-expand-details" aria-label="展開專案詳細資訊 Expand project details" aria-expanded="false">
                             <span class="btn-text" data-lang-key="show-more">show-more</span>
                             <span class="arrow"></span>
                         </button>
@@ -1080,7 +1159,7 @@
                     </div>
                     <div class="patent-body">
                         <div class="patent-photo">
-                            <img src="images/patents/patent1.jpg" alt="Mushroom Stem Cutting Machine - Invention Patent" class="patent-img" loading="eager">
+                            <img src="images/patents/patent1.jpg" alt="Mushroom Stem Cutting Machine - Invention Patent" class="patent-img" width="500" height="375" loading="eager">
                             <p class="patent-photo-caption" data-lang-key="patent-1-caption">Invention Patent - TW I-891383</p>
                         </div>
                         <div class="patent-details">
@@ -1109,7 +1188,7 @@
                     </div>
                     <div class="patent-body">
                         <div class="patent-photo">
-                            <img src="images/patents/patent2.jpg" alt="Mushroom Stem Cutting Machine - Utility Model Patent" class="patent-img" loading="eager">
+                            <img src="images/patents/patent2.jpg" alt="Mushroom Stem Cutting Machine - Utility Model Patent" class="patent-img" width="500" height="375" loading="eager">
                             <p class="patent-photo-caption" data-lang-key="patent-2-caption">Utility Model Patent - TW M-659734</p>
                         </div>
                         <div class="patent-details">
@@ -1260,7 +1339,7 @@
         <div class="container">
             <div class="section-header">
                 <div class="lab-title-wrapper">
-                    <img src="images/lab_logo.png" alt="Laboratory Logo" class="lab-logo">
+                    <img src="images/lab_logo.png" alt="Laboratory Logo" class="lab-logo" width="200" height="200">
                     <h2 class="section-title" data-lang-key="lab-title">Intelligent Multi-Axis Composite Tech</h2>
                 </div>
                 <p class="section-subtitle" data-lang-key="lab-subtitle">Affiliated Laboratory - I.M.A.C.T</p>
@@ -1275,7 +1354,7 @@
                         </div>
                         <p class="video-caption" data-lang-key="lab-video-caption">Robotic Arm Digital Twin Bidirectional Synchronization Demonstration – Brief Laboratory Environment Introduction (NX & RoboGuide)</p>
                         </div>
-                    <img src="images/lab_photo.png" alt="Laboratory Environment" class="lab-photo" loading="lazy">
+                    <img src="images/lab_photo.png" alt="Laboratory Environment" class="lab-photo" width="800" height="600" loading="lazy">
                     <p class="photo-caption" data-lang-key="lab-photo-caption">Our Laboratory Research Area</p>
                 </div>
             </div>
@@ -1296,7 +1375,7 @@
                 <div class="scholars-grid">
                     <article class="scholar-card">
                         <div class="scholar-photo">
-                            <img src="images/scholars/czech_scholar.jpg" alt="Czech Scholar - Petr Sittner" loading="lazy">
+                            <img src="images/scholars/czech_scholar.jpg" alt="Czech Scholar - Petr Sittner" width="300" height="300" loading="lazy">
                         </div>
                         <div class="scholar-info">
                             <h4 class="scholar-name">Petr Sittner</h4>
@@ -1307,7 +1386,7 @@
 
                     <article class="scholar-card">
                         <div class="scholar-photo">
-                            <img src="images/scholars/vietnamese_scholar.jpg" alt="Vietnamese Scholar - Hoang An Quoc" loading="lazy">
+                            <img src="images/scholars/vietnamese_scholar.jpg" alt="Vietnamese Scholar - Hoang An Quoc" width="300" height="300" loading="lazy">
                         </div>
                         <div class="scholar-info">
                             <h4 class="scholar-name">Hoang An Quoc</h4>
@@ -1324,8 +1403,8 @@
                 <div class="exchange-grid">
                     <article class="exchange-card">
                         <div class="exchange-photos-dual">
-                            <img src="images/exchange/suwa_exchange_1.jpg" alt="Suwa University of Science Exchange Photo 1" loading="lazy">
-                            <img src="images/exchange/suwa_exchange_2.jpg" alt="Suwa University of Science Exchange Photo 2" loading="lazy">
+                            <img src="images/exchange/suwa_exchange_1.jpg" alt="Suwa University of Science Exchange Photo 1" width="400" height="300" loading="lazy">
+                            <img src="images/exchange/suwa_exchange_2.jpg" alt="Suwa University of Science Exchange Photo 2" width="400" height="300" loading="lazy">
                         </div>
                         <div class="exchange-info">
                             <h4 class="exchange-institution" data-lang-key="experiences-exchange-1-institution">Suwa University of Science</h4>

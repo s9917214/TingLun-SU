@@ -232,6 +232,27 @@ function onPlayerReady(event) {
     const player = event.target;
     const playerWrapper = player.getIframe().closest('.video-wrapper');
 
+    // 設定預設播放速度為 2x
+    player.setPlaybackRate(2);
+
+    // 建立速度控制按鈕
+    const speedButton = document.createElement('div');
+    speedButton.className = 'speed-button';
+    speedButton.textContent = '2x';
+    speedButton.dataset.currentSpeed = '2';
+    playerWrapper.appendChild(speedButton);
+
+    // 速度選項
+    const speedOptions = [1, 1.25, 1.5, 1.75, 2];
+    speedButton.addEventListener('click', () => {
+        const currentIndex = speedOptions.indexOf(parseFloat(speedButton.dataset.currentSpeed));
+        const nextIndex = (currentIndex + 1) % speedOptions.length;
+        const newSpeed = speedOptions[nextIndex];
+        player.setPlaybackRate(newSpeed);
+        speedButton.dataset.currentSpeed = newSpeed.toString();
+        speedButton.textContent = newSpeed === 1 ? '1x' : newSpeed + 'x';
+    });
+
     // 建立取消靜音按鈕
     const unmuteButton = document.createElement('div');
     unmuteButton.className = 'unmute-button';
