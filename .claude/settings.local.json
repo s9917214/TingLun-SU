@@ -11,7 +11,8 @@
       "Bash(where.exe:*)",
       "Bash(test:*)",
       "Bash(\"$LOCALAPPDATA/Programs/MiKTeX/miktex/bin/x64/pdflatex.exe\":*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebSearch"
     ]
   }
 }
