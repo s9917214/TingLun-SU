@@ -821,6 +821,17 @@ body {
     color: var(--text-inverse);
 }
 
+.pub-link.contact {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.pub-link.contact:hover {
+    background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+    color: #1b5e20;
+}
+
 /* ==================== Patents ==================== */
 .patents-grid {
     display: grid;
@@ -1846,6 +1857,19 @@ body {
     box-shadow: var(--shadow-lg);
 }
 
+/* Reversed Layout (Info left, Photo right) */
+.exchange-card.reversed {
+    grid-template-columns: 1.2fr 0.8fr;
+}
+
+.exchange-card.reversed .exchange-info {
+    order: 1;
+}
+
+.exchange-card.reversed .exchange-photo-single {
+    order: 2;
+}
+
 /* Germany Program Badge */
 .exchange-program.germany {
     background: linear-gradient(135deg, #fff3cd, #ffeeba);
@@ -2057,6 +2081,18 @@ body {
         height: auto;
         min-height: 300px;
         padding: 16px;
+    }
+
+    .exchange-card.reversed {
+        grid-template-columns: 1fr;
+    }
+
+    .exchange-card.reversed .exchange-info {
+        order: 2;
+    }
+
+    .exchange-card.reversed .exchange-photo-single {
+        order: 1;
     }
 
     .exchange-status-badge {
