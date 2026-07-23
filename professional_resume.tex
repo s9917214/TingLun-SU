@@ -1,0 +1,320 @@
+% Professional Resume - Ting-Lun Su
+% Optimized for R&D Engineer positions in international companies
+% ATS-friendly format with quantified achievements
+
+\documentclass[11pt,a4paper]{article}
+
+% Packages
+\usepackage[top=1.5cm, bottom=1.5cm, left=1.8cm, right=1.8cm]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{tabularx}
+
+% Color scheme
+\definecolor{primarycolor}{RGB}{26, 84, 144}
+\definecolor{accentcolor}{RGB}{41, 128, 185}
+\definecolor{textcolor}{RGB}{51, 51, 51}
+
+% Hyperlink setup
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primarycolor,
+    urlcolor=primarycolor,
+    citecolor=primarycolor
+}
+
+% Section formatting
+\titleformat{\section}
+{\color{primarycolor}\Large\bfseries\uppercase}
+{}{0em}{}[\titlerule]
+
+\titleformat{\subsection}
+{\color{accentcolor}\large\bfseries}
+{}{0em}{}
+
+\titlespacing{\section}{0pt}{8pt}{4pt}
+\titlespacing{\subsection}{0pt}{6pt}{3pt}
+
+% Custom commands
+\newcommand{\resumeSubheading}[4]{
+    \vspace{2pt}
+    \begin{tabular*}{\textwidth}[t]{@{}l@{\extracolsep{\fill}}r@{}}
+        \textbf{#1} & \textit{#2} \\
+        \textit{\small#3} & \textit{\small#4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \vspace{2pt}
+    \begin{tabular*}{\textwidth}[t]{@{}l@{\extracolsep{\fill}}r@{}}
+        \textbf{#1} & \textit{\small#2} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeItem}[1]{
+    \item\small{#1 \vspace{-2pt}}
+}
+
+% No page numbers
+\pagestyle{empty}
+
+% Remove paragraph indentation
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% ============================================
+% HEADER
+% ============================================
+\begin{center}
+    {\Huge\textbf{\color{primarycolor}TING-LUN SU}}\\[4pt]
+    {\large R\&D Engineer | AI \& Robotics Specialist}\\[8pt]
+
+    \begin{tabular}{c | c | c | c}
+        \faIcon{phone} +886-933-888-373 &
+        \faIcon{envelope} \href{mailto:s9917214@gmail.com}{s9917214@gmail.com} &
+        \faIcon{map-marker-alt} Taichung, Taiwan &
+        \faIcon{globe} \href{https://orcid.org/0009-0008-8028-896X}{ORCID: 0009-0008-8028-896X}
+    \end{tabular}
+\end{center}
+
+\vspace{-8pt}
+
+% ============================================
+% PROFESSIONAL SUMMARY
+% ============================================
+\section{Professional Summary}
+\vspace{2pt}
+Research-oriented R\&D engineer with expertise in AI-driven robotics and intelligent manufacturing. Led 6 industry-academia projects deploying 30+ automated systems (20 CNC machines, 10 robotic arms) achieving 80\% manpower reduction and 91\% defect reduction. Published 2 journal papers (1 SCI-indexed) and holds 2 patents. Specialized in computer vision, path optimization algorithms, and large-scale automation system integration.
+
+% ============================================
+% EDUCATION
+% ============================================
+\section{Education}
+\vspace{2pt}
+
+\resumeSubheading
+{B.S. in Intelligent Automation Engineering}{Expected: June 2026}
+{National Chin-Yi University of Technology (NCUT)}{Taichung, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Focus: AI-driven robotics, intelligent manufacturing, computer vision, and industrial automation}
+    \resumeItem{Led multiple large-scale industry-academia collaborative research projects}
+    \resumeItem{Active contributor to academic publications and patent development}
+\end{itemize}
+
+% ============================================
+% TECHNICAL SKILLS
+% ============================================
+\section{Technical Skills}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{Programming Languages:} Python, C\#, C++, MATLAB
+    \item \textbf{AI \& Machine Learning:} YOLO Object Detection, Computer Vision (OpenCV), Deep Learning, Algorithm Development
+    \item \textbf{Robotics \& Automation:} Robot Arm Programming \& Control, Path Planning (Ant Colony Optimization, Bayesian Optimization), System Integration, PLC Programming, CNC Communication
+    \item \textbf{CAD/CAM \& Design:} SolidWorks, 3D Modeling, Mechanical Design
+    \item \textbf{Emerging Technologies:} Large Language Models (LLM), Model Context Protocol (MCP), Generative AI Applications
+    \item \textbf{Industrial Systems:} Industrial Control Systems, Smart Manufacturing, Industry 4.0 Solutions
+\end{itemize}
+
+% ============================================
+% PROFESSIONAL EXPERIENCE
+% ============================================
+\section{Professional Experience}
+\vspace{2pt}
+
+\resumeProjectHeading
+{\textbf{Lead R\&D Engineer} | Visual Measurement \& AI Navigation System}{Jan 2025 -- Present}
+\textit{TURVO INTERNATIONAL CO., LTD., Taichung, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Lead project planning, technical architecture design, and stakeholder communication for AI-powered quality inspection system}
+    \resumeItem{Developed intelligent navigation assistance software integrating LLM and Model Context Protocol (MCP)}
+    \resumeItem{Designed computer vision-based measurement inspection station with real-time defect detection capabilities}
+    \resumeItem{Implemented user guidance system leveraging generative AI for operational efficiency improvement}
+\end{itemize}
+
+\vspace{4pt}
+
+\resumeProjectHeading
+{\textbf{Project Lead} | Smart CNC Flexible Manufacturing Factory (3-Phase)}{Jan 2024 -- Dec 2025}
+\textit{IC STAR INDUSTRIAL CO., LTD., Taichung, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Led 42-member cross-functional team through complete factory automation transformation across two plants}
+    \resumeItem{Deployed 20 CNC machines and 10 robotic arms with full hardware-software-control system integration}
+    \resumeItem{\textbf{Impact:} Achieved 80\% manpower reduction, significantly enhanced production throughput and operational efficiency}
+    \resumeItem{Managed end-to-end implementation: robotics programming, CNC communication protocols, HMI design, and control system architecture}
+    \resumeItem{Redesigned Plant A layout and constructed new Plant B with Industry 4.0 standards}
+\end{itemize}
+
+\vspace{4pt}
+
+\resumeProjectHeading
+{\textbf{AI Algorithm Lead} | Automated Forging Spraying System (2-Phase)}{Jun 2023 -- Dec 2024}
+\textit{IC STAR INDUSTRIAL CO., LTD., Changhua, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Developed AI-based path planning system using Ant Colony Optimization and Bayesian Optimization for robotic spray coating}
+    \resumeItem{\textbf{Results:} 27\% production increase, 91\% defect reduction, 21\% cost savings across 3 automated forging lines}
+    \resumeItem{Achieved 97.3\% trajectory matching accuracy and 83\% reduction in production line switching time}
+    \resumeItem{Integrated robotic arm control with real-time process monitoring and adaptive path adjustment}
+\end{itemize}
+
+\vspace{4pt}
+
+\resumeProjectHeading
+{\textbf{Computer Vision Engineer} | CNC Chip Entanglement Detection System}{Mar 2023 -- Aug 2023}
+\textit{Industrial Technology Research Institute (ITRI), Taichung, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Developed real-time AI-based YOLO vision system for detecting CNC tool chip entanglement in unmanned manufacturing lines}
+    \resumeItem{Reduced machine downtime and maintenance costs through early fault detection and prevention}
+    \resumeItem{Deployed solution in smart manufacturing environment with 24/7 operational requirements}
+\end{itemize}
+
+\vspace{4pt}
+
+\resumeProjectHeading
+{\textbf{Product Lead} | Automatic Mushroom Stem-Cutting System Commercialization}{Sep 2022 -- Present}
+\textit{University Social Responsibility (USR) Project, Xinshe, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Led product development from prototype to commercialization, achieving mass production adopted by 3 manufacturers}
+    \resumeItem{Designed and patented innovative pressing mechanism and auto-sorting system (2 patents granted)}
+    \resumeItem{Improved agricultural processing efficiency and product quality consistency through automation}
+    \resumeItem{Managed full product lifecycle: mechanical design, control system, field testing, and client deployment}
+\end{itemize}
+
+\vspace{4pt}
+
+\resumeProjectHeading
+{\textbf{System Integration Engineer} | 3D Vision-Guided Robotic Picking System}{Sep 2022 -- Present}
+\textit{LIEBHERR-Verzahntechnik GmbH \& PONGI Gear Expert CO., LTD., Taichung, Taiwan}
+\vspace{2pt}
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \resumeItem{Integrated and optimized Liebherr LHRobotics.Vision random picking system for Taiwan market deployment}
+    \resumeItem{Developed 3D vision-guided robotic coordination algorithms to enhance precision and operational flexibility}
+    \resumeItem{Provided technical consulting for client implementation, troubleshooting, and performance optimization}
+\end{itemize}
+
+\pagebreak
+
+% ============================================
+% PUBLICATIONS
+% ============================================
+\section{Publications}
+\vspace{2pt}
+
+\textbf{Journal Articles}
+\vspace{2pt}
+
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+    \item \textbf{T.-L. Su}, P.-J. Chen, T.-J. Peng, and C.-C. Lin, ``Automated spray path planning based on Bayesian optimization and ant colony optimization,'' \textit{The International Journal of Advanced Manufacturing Technology}, vol. 139, pp. 5491--5509, Aug. 2025.\\
+    DOI: \href{https://doi.org/10.1007/s00170-025-16162-x}{10.1007/s00170-025-16162-x} | \textbf{SCI-indexed, Q2, Impact Factor: 2.9}
+
+    \item T.-J. Peng, P.-J. Chen, \textbf{T.-L. Su}, and C.-C. Lin, ``Optimization of Automated Forging Release Agent Spray Path Based on Ant Colony Algorithm,'' \textit{Journal of Automation Intelligence and Robotics}, TAIROA, No. 51, pp. 114--120, Dec. 2024.
+\end{enumerate}
+
+\vspace{4pt}
+
+\textbf{Selected Conference Papers}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{T.-L. Su}, C.-H. Du, and C.-H. Lai, ``Development of a Contactless AIoT Smart Data Management Hybrid Vending System,'' \textit{17th Intelligent Living Technology Conference (ILT)}, Jun. 2023.
+
+    \item Z.-L. Sun et al. (incl. \textbf{T.-L. Su}), ``Green Machining Optimization and Burr Treatment in Mill-Turn Operations,'' \textit{27th CSMMT Annual Meeting}, Nov. 2024.
+\end{itemize}
+
+% ============================================
+% PATENTS
+% ============================================
+\section{Patents}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=3pt]
+    \item \textbf{Invention Patent:} Mushroom Stem Cutting Machine | Taiwan Patent No. \textbf{I891383} (Granted May 2025)\\
+    \textit{Automated agricultural processing device with precision cutting mechanism}
+
+    \item \textbf{Utility Model Patent:} Mushroom Stem Cutting Machine | Taiwan Patent No. \textbf{M659734} (Granted Aug 2024)\\
+    \textit{Enhanced mechanical design for improved stability and cutting performance}
+\end{itemize}
+
+% ============================================
+% HONORS & AWARDS
+% ============================================
+\section{Honors \& Awards}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{2nd Place} | National Vocational and Technical College Student Practical Project Competition (2025)
+    \item \textbf{1st Place} | Intelligent Automation Equipment Invention Awards, 13th Edition (2024)
+    \item \textbf{3rd Place} | Taiwan Society of Precision Engineering's 113th Project and Paper Award (2024)
+    \item \textbf{Honorable Mention} | Mitsubishi Electric Contest of Automation, 1st Edition (2024)
+    \item \textbf{Science and Technology Humanities Award} | 27th TDK Cup National Collegiate Creative Design Competition (2023)
+    \item \textbf{Early Achievements (2020--2022):} 3 Gold, 2 Silver, 4 Honorable Mentions in National Competitions
+\end{itemize}
+
+% ============================================
+% CONFERENCE PRESENTATIONS & EXHIBITIONS
+% ============================================
+\section{Conference Presentations \& Industry Exhibitions}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item \textbf{2025 Taipei USR EXPO} (Sep 2025) -- Presented sustainable agricultural automation system with AI-based control
+    \item \textbf{2024 Taipei International Automation Exhibition} (Aug 2024) -- Showcased AI robotic spraying system, initiated industry collaboration
+\end{itemize}
+
+% ============================================
+% PROFESSIONAL CERTIFICATIONS
+% ============================================
+\section{Professional Certifications}
+\vspace{2pt}
+
+\begin{multicols}{2}
+\begin{itemize}[leftmargin=*, itemsep=2pt]
+    \item Photovoltaic System Installation (Class B)
+    \item AI Application Planner (iPAS Certified)
+    \item Industrial Wiring (Class C)
+    \item Commercial Wiring (Class C)
+\end{itemize}
+\end{multicols}
+
+% ============================================
+% INTERNATIONAL EXPERIENCE
+% ============================================
+\section{International Academic Exchange}
+\vspace{2pt}
+
+\textbf{SAKURA SCIENCE Exchange Program} | Japan Science and Technology Agency (JST) | 2024\\
+\textit{Suwa University of Science, Nagano, Japan | Host: Prof. Masahide Oshima (Vice President)}
+
+% ============================================
+% LANGUAGES
+% ============================================
+\section{Languages}
+\vspace{2pt}
+
+\begin{itemize}[leftmargin=*, itemsep=1pt]
+    \item \textbf{Chinese:} Native proficiency
+    \item \textbf{English:} Professional working proficiency (TOEIC: 660)
+    \item \textbf{German:} Elementary proficiency
+\end{itemize}
+
+\vspace{8pt}
+
+% ============================================
+% FOOTER
+% ============================================
+\begin{center}
+\textit{\small References available upon request}
+\end{center}
+
+\end{document}
