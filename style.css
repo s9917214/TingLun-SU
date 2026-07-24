@@ -2081,6 +2081,8 @@ body {
         height: auto;
         min-height: 300px;
         padding: 16px;
+        flex-direction: column;
+        gap: 12px;
     }
 
     .exchange-card.reversed {
@@ -2095,9 +2097,11 @@ body {
         order: 1;
     }
 
+    /* 手機版改為排入正常文件流，避免徽章蓋住證書圖片內容 */
     .exchange-status-badge {
-        top: 24px;
-        right: 24px;
+        position: static;
+        order: -1;
+        align-self: flex-end;
     }
 
     .footer-content {
@@ -2113,7 +2117,7 @@ body {
 
 @media (max-width: 480px) {
     html {
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .container {
@@ -2161,8 +2165,6 @@ body {
     }
 
     .exchange-status-badge {
-        top: 18px;
-        right: 18px;
         font-size: 0.75rem;
         padding: 5px 10px;
     }
