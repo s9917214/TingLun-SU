@@ -89,28 +89,6 @@ body {
     letter-spacing: 0.5px;
 }
 
-.lang-switch {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.lang-btn {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: var(--text-inverse);
-    padding: 0.25rem 0.75rem;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.3s;
-}
-
-.lang-btn:hover,
-.lang-btn.active {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: var(--text-inverse);
-}
-
 /* ==================== 導航列 ==================== */
 .navbar {
     background: var(--bg-primary);
@@ -530,6 +508,11 @@ body {
     color: #155724;
 }
 
+.status-ongoing {
+    background: #fff3cd;
+    color: #856404;
+}
+
 .project-role {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
@@ -742,6 +725,11 @@ body {
 .badge-q1 {
     background: #f3e5f5;
     color: #6a1b9a;
+}
+
+.badge-q2 {
+    background: #ede7f6;
+    color: #4527a0;
 }
 
 .badge-if {
@@ -2199,7 +2187,7 @@ body {
 }
 
 /* ==================== 動畫效果 ==================== */
-@keyframes fadeIn {
+@keyframes fadeInUp {
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -2211,7 +2199,7 @@ body {
 }
 
 .fade-in {
-    animation: fadeIn 0.6s ease-out;
+    animation: fadeInUp 0.6s ease-out;
 }
 
 /* 平滑過渡 */
@@ -2301,10 +2289,12 @@ button,
 .grid-img-four,
 .carousel-img {
     opacity: 0;
-    animation: fadeIn 0.5s ease-in-out forwards;
+    animation: imgFadeIn 0.5s ease-in-out forwards;
 }
 
-@keyframes fadeIn {
+/* Opacity only — must not animate `transform`, or `animation-fill-mode: forwards`
+   would permanently pin it and defeat the :hover scale rules on these images. */
+@keyframes imgFadeIn {
     to {
         opacity: 1;
     }

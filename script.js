@@ -23,21 +23,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ==================== 導航列滾動效果 ====================
-let lastScrollTop = 0;
 const navbar = document.querySelector('.navbar');
 
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+if (navbar) {
+    let navbarScrolled = null;
 
-    // 滾動超過 100px 時加強陰影
-    if (scrollTop > 100) {
-        navbar.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-    } else {
-        navbar.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.06)';
-    }
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrolled = scrollTop > 100;
 
-    lastScrollTop = scrollTop;
-});
+        // 只在狀態改變時寫入，避免每次 scroll 都觸發 style recalc
+        if (scrolled !== navbarScrolled) {
+            navbarScrolled = scrolled;
+            navbar.style.boxShadow = scrolled
+                ? '0 4px 8px rgba(0, 0, 0, 0.1)'
+                : '0 1px 3px rgba(0, 0, 0, 0.06)';
+        }
+    }, { passive: true });
+}
 
 // ==================== 導航選單高亮 ====================
 const sections = document.querySelectorAll('section[id]');
@@ -62,7 +65,8 @@ function highlightNavigation() {
     });
 }
 
-window.addEventListener('scroll', highlightNavigation);
+// 註：scroll 監聽統一註冊在檔案下方的 optimizedScrollHandler（已 debounce），
+// 此處不要再綁一次未節流的版本，否則 debounce 形同虛設。
 
 // ==================== 手機選單切換 ====================
 const menuToggle = document.querySelector('.menu-toggle');
@@ -88,9 +92,10 @@ if (menuToggle && navMenu) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    initializePage();
-});
+// 註：initializePage() 統一由檔案下方唯一一處 DOMContentLoaded 呼叫。
+// 這裡曾重複註冊過一次，導致所有初始化（輪播 interval、BibTeX listener、
+// IntersectionObserver）都被建立兩份。
+
 // ==================== 滾動顯示動畫 ====================
 const observerOptions = {
     threshold: 0.1,
@@ -344,15 +349,17 @@ function createScrollToTopButton() {
         });
     });
 
+    let buttonVisible = null;
+
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 500) {
-            button.style.opacity = '1';
-            button.style.visibility = 'visible';
-        } else {
-            button.style.opacity = '0';
-            button.style.visibility = 'hidden';
+        const visible = window.scrollY > 500;
+
+        if (visible !== buttonVisible) {
+            buttonVisible = visible;
+            button.style.opacity = visible ? '1' : '0';
+            button.style.visibility = visible ? 'visible' : 'hidden';
         }
-    });
+    }, { passive: true });
 
     button.addEventListener('mouseenter', () => {
         button.style.transform = 'translateY(-5px)';
@@ -503,7 +510,7 @@ const optimizedScrollHandler = debounce(() => {
     highlightNavigation();
 }, 50);
 
-window.addEventListener('scroll', optimizedScrollHandler);
+window.addEventListener('scroll', optimizedScrollHandler, { passive: true });
 
 // ==================== 視窗大小改變處理 ====================
 let windowWidth = window.innerWidth;

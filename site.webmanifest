@@ -1,1 +1,23 @@
-{"name":"","short_name":"","icons":[{"src":"/android-chrome-192x192.png","sizes":"192x192","type":"image/png"},{"src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"}],"theme_color":"#ffffff","background_color":"#ffffff","display":"standalone"}
+{
+  "name": "Ting-Lun Su | Academic Research Portfolio",
+  "short_name": "Ting-Lun Su",
+  "description": "Academic research portfolio of Ting-Lun Su — quality engineering, artificial intelligence, smart manufacturing and automation.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2c3e50",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
