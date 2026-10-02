@@ -1043,18 +1043,30 @@ body {
 }
 
 .award-badge.first {
-    background: linear-gradient(135deg, #FFD700, #FFA500);
-    color: #000;
+    background: linear-gradient(135deg, #fff4c4 0%, #f7d774 30%, #d9a520 58%, #ffe9a8 78%, #e0b032 100%);
+    color: #5a4208;
+    border: 1px solid #d9b64a;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
 }
 
 .award-badge.second {
-    background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
-    color: #000;
+    background: linear-gradient(135deg, #f7f9fb 0%, #dfe4ea 35%, #b9c0c9 60%, #eef1f5 80%, #cdd3da 100%);
+    color: #3a4149;
+    border: 1px solid #c3c9d1;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.06);
 }
 
 .award-badge.third {
-    background: linear-gradient(135deg, #CD7F32, #B87333);
-    color: #fff;
+    background: linear-gradient(135deg, #f0c9a0 0%, #cd8b4a 32%, #a85f28 60%, #e3ab77 80%, #b4712f 100%);
+    color: #ffffff;
+    border: 1px solid #a9682f;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .award-badge.mention {
@@ -1062,9 +1074,37 @@ body {
     color: var(--text-inverse);
 }
 
+/* Judge's Special Award - understated premium accent */
 .award-badge.special {
-    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    background: linear-gradient(135deg, #5c3a86, #7b3fa0);
+    color: #fdf6ff;
+    border: 1px solid #c9a24d;
+    letter-spacing: 0.04em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Global / International marker (compact, inline with title) */
+.award-tag-global {
+    display: inline-block;
+    vertical-align: 2px;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.4rem;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #1d7fb8, #0f4c75);
     color: var(--text-inverse);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.award-badge + .award-badge {
+    margin-left: 0.35rem;
+}
+
+.award-card-compact.global-award {
+    border-left: 3px solid #1d7fb8;
 }
 
 /* Award Photo */
