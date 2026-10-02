@@ -115,6 +115,12 @@ This website adopts a pure static architecture:
 - **Location** - Taichung, Taiwan
 - **Institution** - National Chin-Yi University of Technology
 
+## © Copyright
+
+Copyright © 2026 Ting-Lun Su. **All rights reserved.**
+
+All content in this repository (code, text, images, documents, and design) may not be copied, modified, or redistributed without prior written permission. See [LICENSE](LICENSE) for details.
+
 ---
 
 > "Bridging AI innovation with industrial reality through intelligent automation and collaborative research."
