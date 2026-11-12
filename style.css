@@ -722,6 +722,11 @@ body {
     color: #1565c0;
 }
 
+.badge-conference {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
 .badge-q1 {
     background: #f3e5f5;
     color: #6a1b9a;
@@ -857,7 +862,7 @@ body {
 
 .patent-body {
     display: grid;
-    grid-template-columns: 1fr 1.5fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     gap: var(--spacing-lg);
     align-items: start;
 }
@@ -868,20 +873,20 @@ body {
 }
 
 .patent-img {
+    display: block;
     width: 100%;
-    aspect-ratio: 4/3;
-    object-fit: contain;
-    background: var(--bg-secondary);
+    height: auto;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     box-shadow: var(--shadow-sm);
     margin-bottom: var(--spacing-xs);
 }
 
 .patent-photo-caption {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-light);
     text-align: center;
-    font-style: italic;
     margin: 0;
 }
 
@@ -933,8 +938,13 @@ body {
 .patent-field {
     display: flex;
     justify-content: space-between;
-    padding: 0.75rem 0;
+    gap: var(--spacing-sm);
+    padding: 0.6rem 0;
     border-bottom: 1px solid var(--border-light);
+}
+
+.patent-field:first-child {
+    padding-top: 0;
 }
 
 .field-label {
@@ -950,9 +960,10 @@ body {
 }
 
 .patent-abstract {
+    font-size: 0.9rem;
     color: var(--text-secondary);
     line-height: 1.7;
-    margin: var(--spacing-md) 0;
+    margin: var(--spacing-md) 0 0;
 }
 
 .patent-link {
@@ -1679,6 +1690,15 @@ body {
     font-size: 1rem;
     color: var(--text-secondary);
     margin-bottom: 0.25rem;
+}
+
+/* the scholar card is centre-aligned, so the flag line has to centre too */
+.scholar-title.with-mark {
+    justify-content: center;
+}
+
+.scholar-title .line-mark.flag {
+    height: 14px;
 }
 
 .scholar-affiliation {
