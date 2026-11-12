@@ -745,6 +745,13 @@ body {
     line-height: 1.4;
 }
 
+.pub-title-zh {
+    font-size: 1rem;
+    color: var(--color-secondary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+}
+
 .pub-authors {
     font-size: 0.95rem;
     color: var(--text-secondary);
@@ -1904,6 +1911,35 @@ body {
     color: #856404;
 }
 
+/* Inline organisation marks on the info lines */
+.with-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+p.with-mark {
+    display: flex;
+}
+
+.line-mark {
+    flex: none;
+    height: 18px;
+    width: auto;
+    max-width: 44px;
+    object-fit: contain;
+}
+
+.exchange-program.with-mark .line-mark {
+    height: 22px;
+}
+
+.line-mark.flag {
+    height: 12px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
 /* Duration Info */
 .exchange-duration {
     font-size: 0.85rem;
@@ -1951,13 +1987,20 @@ body {
 
 .column-gallery {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 220px));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--spacing-md);
+    align-items: stretch;
+    padding-bottom: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
 }
 
+/* Flex column + growing caption keeps every accent rule the same length,
+   however many lines each caption runs to. */
 .column-gallery figure {
     margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .column-gallery img {
@@ -1976,8 +2019,9 @@ body {
 }
 
 .column-gallery figcaption {
-    margin-top: var(--spacing-xs);
-    padding-left: 0.6rem;
+    flex: 1;
+    margin-top: 0.7rem;
+    padding-left: 0.7rem;
     border-left: 2px solid var(--color-accent);
     font-size: 0.8rem;
     line-height: 1.55;
@@ -1985,7 +2029,18 @@ body {
 }
 
 .column-body {
-    max-width: 72ch;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+.column-text {
+    max-width: 64ch;
+}
+
+.column-text p:last-child {
+    margin-bottom: 0;
 }
 
 .column-body p {
@@ -1996,7 +2051,7 @@ body {
 }
 
 .column-quote {
-    margin: var(--spacing-md) 0;
+    margin: 0;
     padding: var(--spacing-sm) var(--spacing-md);
     border-left: 3px solid var(--color-highlight);
     background: var(--bg-primary);
@@ -2024,12 +2079,27 @@ body {
 }
 
 .column-visits li {
-    padding: 4px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 5px 14px 5px 9px;
     border-radius: 20px;
     background: var(--bg-tertiary);
     font-size: 0.78rem;
     font-weight: 500;
     color: var(--color-secondary);
+}
+
+.column-visits li.no-logo {
+    padding-left: 14px;
+}
+
+.visit-logo {
+    flex: none;
+    height: 26px;
+    width: auto;
+    max-width: 78px;
+    object-fit: contain;
 }
 
 .column-links {
@@ -2286,6 +2356,11 @@ body {
     .column-gallery {
         grid-template-columns: repeat(auto-fit, minmax(0, 200px));
         gap: var(--spacing-sm);
+    }
+
+    .column-body {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--spacing-md);
     }
 
     /* 手機版改為排入正常文件流，避免徽章蓋住證書圖片內容 */
