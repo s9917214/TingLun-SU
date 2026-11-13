@@ -1132,7 +1132,10 @@ body {
 }
 
 .award-img {
-    width: 100%;
+    display: block;
+    width: 72%;
+    margin-left: auto;
+    margin-right: auto;
     height: auto;
     border-radius: 8px;
     box-shadow: var(--shadow-md);
@@ -2770,5 +2773,845 @@ button,
     .lab-photo {
         max-width: 100%;
         page-break-inside: avoid;
+    }
+}
+
+/* ==================== 手機精簡版面 (Mobile compact layout) ==================== */
+/* 目標：手機一屏看到更多資訊、長文字預設收合 */
+.hero-avatar {
+    display: none;
+}
+
+.m-more {
+    background: none;
+    border: none;
+    padding: 0.25rem 0;
+    margin-top: 0.15rem;
+    color: var(--color-accent);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.m-more[hidden] {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 15px;
+    }
+
+    body {
+        line-height: 1.6;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
+
+    /* --- 頁首：拿掉學校橫條、導覽列變薄 --- */
+    .top-bar {
+        display: none;
+    }
+
+    .nav-content {
+        padding: 0.55rem 0;
+    }
+
+    .brand-name {
+        font-size: 1.15rem;
+    }
+
+    .brand-title {
+        font-size: 0.62rem;
+    }
+
+    /* --- 共用區塊間距 --- */
+    .section {
+        padding: 2rem 0;
+    }
+
+    .section-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.85rem;
+    }
+
+    /* --- Overview：頭像＋姓名並排 --- */
+    .overview-section {
+        padding: 1.1rem 0 1.5rem;
+    }
+
+    .overview-grid {
+        gap: 1rem;
+    }
+
+    .researcher-tag {
+        font-size: 0.66rem;
+        padding: 0.3rem 0.6rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .hero-head {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .hero-avatar {
+        display: block;
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--bg-primary);
+        box-shadow: var(--shadow-md);
+    }
+
+    .researcher-name {
+        font-size: 1.8rem;
+        margin-bottom: 0;
+    }
+
+    .name-en {
+        font-size: 1.05rem;
+    }
+
+    .research-interests {
+        margin-bottom: 0.9rem;
+    }
+
+    .research-interests h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--text-secondary);
+        margin-bottom: 0.45rem;
+    }
+
+    .interests-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .interests-list li {
+        padding: 0.3rem 0.7rem;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-light);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        line-height: 1.35;
+        color: var(--color-primary);
+    }
+
+    .interests-list li::before {
+        content: none;
+    }
+
+    .academic-goal {
+        padding: 0.75rem 0.9rem;
+        margin-bottom: 0.9rem;
+        border-left-width: 3px;
+    }
+
+    .goal-icon {
+        display: none;
+    }
+
+    .goal-content h4 {
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .goal-content p {
+        font-size: 0.85rem;
+        line-height: 1.55;
+    }
+
+    /* Academic Objective：只顯示標題，點了才展開（JS 加上 .m-goal） */
+    .academic-goal.m-goal {
+        padding: 0;
+    }
+
+    .academic-goal.m-goal .goal-content {
+        flex: 1;
+    }
+
+    .m-goal .goal-content h4 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0;
+        padding: 0.7rem 0.9rem;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .m-goal .goal-content h4::after {
+        content: '▾';
+        color: var(--color-accent);
+        font-size: 0.8rem;
+    }
+
+    .m-goal.open .goal-content h4::after {
+        content: '▴';
+    }
+
+    .m-goal:not(.open) .goal-content p {
+        display: none;
+    }
+
+    .m-goal.open .goal-content p {
+        padding: 0 0.9rem 0.75rem;
+    }
+
+    /* 四個數字：一條整合的數據帶，中間細分隔線 */
+    .quick-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+        padding: 0.85rem 0.25rem;
+        background: var(--bg-primary);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border-top: 3px solid var(--color-accent);
+    }
+
+    .stat-item {
+        flex-direction: column;
+        gap: 0;
+        padding: 0.1rem 0.25rem;
+        text-align: center;
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .stat-item + .stat-item {
+        border-left: 1px solid var(--border-light);
+    }
+
+    .stat-icon {
+        display: none;
+    }
+
+    .stat-data {
+        align-items: center;
+    }
+
+    .stat-value {
+        font-size: 1.55rem;
+        letter-spacing: -0.5px;
+    }
+
+    .stat-label {
+        margin-top: 0.35rem;
+        font-size: 0.58rem;
+        font-weight: 600;
+        line-height: 1.25;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+    }
+
+    /* 聯絡資訊：地點一行 + 四個圖示按鈕 */
+    .profile-card {
+        padding: 0.9rem;
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .profile-image,
+    .contact-info h4 {
+        display: none;
+    }
+
+    .contact-info {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .info-item,
+    .info-item:last-child {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 0.65rem 0.2rem 0.55rem;
+        border: none;
+        border-radius: 10px;
+        background: var(--bg-secondary);
+        transition: background 0.2s;
+    }
+
+    .info-item:active {
+        background: var(--bg-tertiary);
+    }
+
+    .info-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+
+    .info-label svg {
+        width: 34px;
+        height: 34px;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-right: 0 !important;
+        border-radius: 50%;
+        background: rgba(52, 152, 219, 0.12);
+        color: var(--color-accent);
+    }
+
+    /* 整張小卡都可點：連結文字隱藏，點擊範圍撐滿卡片 */
+    .info-item a {
+        font-size: 0;
+    }
+
+    .info-item a::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 10px;
+    }
+
+    /* 地點（沒有連結的那一項）放最上面成一行 */
+    .info-item:has(> span:not(.info-label)) {
+        order: -1;
+        grid-column: 1 / -1;
+        flex-direction: row;
+        gap: 0.35rem;
+        padding: 0 0 0.1rem;
+        background: none;
+    }
+
+    .info-item:has(> span:not(.info-label)) .info-label {
+        font-size: 0;
+    }
+
+    .info-item:has(> span:not(.info-label)) .info-label svg {
+        width: 14px;
+        height: 14px;
+        padding: 0;
+        background: none;
+        color: var(--text-secondary);
+    }
+
+    .info-item > span:not(.info-label) {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+    }
+
+    .btn-download-cv {
+        padding: 0.6rem;
+        font-size: 0.9rem;
+    }
+
+    /* --- Awards --- */
+    .year-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .award-card-compact {
+        padding: 0.7rem 0.8rem;
+        gap: 0.7rem;
+    }
+
+    .award-medal-small {
+        font-size: 1.5rem;
+    }
+
+    .award-title-compact {
+        font-size: 0.88rem;
+    }
+
+    /* --- Research projects --- */
+    .research-project {
+        margin-bottom: 1.25rem;
+    }
+
+    .project-header {
+        padding: 1rem;
+    }
+
+    .project-meta {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .project-title {
+        font-size: 1.2rem;
+        line-height: 1.35;
+    }
+
+    .project-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .project-body {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .project-details {
+        gap: 1rem;
+    }
+
+    .detail-section h4 {
+        font-size: 0.78rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .detail-section p {
+        font-size: 0.9rem;
+    }
+
+    .video-caption {
+        font-size: 0.78rem;
+    }
+
+    .tech-tags {
+        gap: 0.3rem;
+    }
+
+    .tech-tag {
+        font-size: 0.72rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+    /* 成果數字兩欄、字縮小 */
+    .outcomes-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+    }
+
+    .outcome-card {
+        padding: 0.65rem 0.5rem;
+    }
+
+    .outcome-value {
+        font-size: 1.15rem;
+        line-height: 1.2;
+        margin-bottom: 0.2rem;
+    }
+
+    .outcome-label {
+        font-size: 0.7rem;
+        line-height: 1.3;
+    }
+
+    /* --- Publications --- */
+    .publications-list {
+        gap: 1rem;
+    }
+
+    .publication-item {
+        padding: 1rem;
+        gap: 0.4rem;
+    }
+
+    .pub-number {
+        font-size: 1.3rem;
+    }
+
+    .pub-title {
+        font-size: 1.05rem;
+        line-height: 1.4;
+    }
+
+    .pub-authors,
+    .pub-venue {
+        font-size: 0.8rem;
+    }
+
+    .pub-abstract {
+        font-size: 0.88rem;
+        margin-bottom: 0;
+    }
+
+    /* --- Patents：證書縮成左側小圖 --- */
+    .patent-card {
+        padding: 1rem;
+    }
+
+    .patent-body {
+        grid-template-columns: 96px minmax(0, 1fr);
+        gap: 0.9rem;
+    }
+
+    .patent-photo-caption {
+        display: none;
+    }
+
+    .patent-abstract {
+        font-size: 0.85rem;
+    }
+
+    /* --- Exchange / Field report：照片改橫向滑動 --- */
+    .column-gallery {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 0.6rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .column-gallery figure {
+        flex: 0 0 72%;
+        scroll-snap-align: start;
+        margin: 0;
+    }
+
+    .column-gallery img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .exchange-photos-triple {
+        min-height: 0;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    .exchange-photos-triple img {
+        height: 130px;
+        object-position: center 25%;
+    }
+
+    .exchange-photos-triple img:first-child {
+        grid-column: 1 / -1;
+        grid-row: auto;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .exchange-photo-single {
+        min-height: 0;
+    }
+
+    .exchange-photo-single img {
+        max-height: 260px;
+    }
+
+    /* 國際學者兩張卡並排 */
+    .scholars-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+    }
+
+    .scholar-photo {
+        height: auto;
+        aspect-ratio: 4 / 3;
+    }
+
+    .scholar-photo img {
+        object-position: center 25%;
+    }
+
+    .scholar-info {
+        padding: 0.7rem 0.5rem;
+    }
+
+    .scholar-name {
+        font-size: 0.95rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .scholar-card p {
+        font-size: 0.72rem;
+        line-height: 1.35;
+    }
+
+    /* --- Expertise：兩欄小卡，點了才展開（JS 加上 .m-acc） --- */
+    .expertise-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+    }
+
+    .expertise-category {
+        padding: 1rem;
+    }
+
+    .category-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .expertise-category.m-acc {
+        padding: 0;
+    }
+
+    .m-acc .category-title {
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.3rem;
+        margin: 0;
+        padding: 0.9rem 0.5rem 0.75rem;
+        min-height: 100%;
+        font-size: 0.85rem;
+        line-height: 1.3;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .m-acc .category-icon {
+        font-size: 1.5rem;
+    }
+
+    .m-acc-count {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .m-acc-count::after {
+        content: ' ▾';
+        color: var(--color-accent);
+    }
+
+    .m-acc:not(.open) .tech-list,
+    .m-acc:not(.open) .skills-list {
+        display: none;
+    }
+
+    .m-acc.open {
+        grid-column: 1 / -1;
+    }
+
+    .m-acc.open .category-title {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 0.9rem 1rem 0.6rem;
+        font-size: 1rem;
+    }
+
+    .m-acc.open .m-acc-count {
+        margin-left: auto;
+    }
+
+    .m-acc.open .m-acc-count::after {
+        content: ' ▴';
+    }
+
+    .m-acc.open .tech-list,
+    .m-acc.open .skills-list {
+        padding: 0 1rem 1rem;
+    }
+
+    /* --- Contact：卡片改兩欄小卡 --- */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.6rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .contact-card,
+    .contact-card:last-child {
+        min-width: 0;
+        max-width: none;
+        padding: 0.8rem 0.6rem;
+    }
+
+    .contact-card:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .card-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .card-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .contact-card h3 {
+        font-size: 0.85rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .contact-card p {
+        font-size: 0.8rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .card-note {
+        display: none;
+    }
+
+    .statement-box {
+        padding: 1.1rem;
+        border-left-width: 3px;
+    }
+
+    .statement-box p {
+        font-size: 0.9rem;
+    }
+
+    /* --- 長文字收合（由 script.js 的 initMobileReadMore 加上 .m-clamp） --- */
+    .m-clamp {
+        max-height: 6.4em;
+        overflow: hidden;
+        -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+        mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    }
+}
+
+/* ==================== 章節刻度尺 (Section ruler) ==================== */
+/* 導覽列下方一條由左到右的刻度線，捲動時像相機變焦轉盤一樣滑動，
+   目前所在章節停在中央並放大。由 script.js 的 initSectionRuler 建立。 */
+section[id] {
+    scroll-margin-top: var(--nav-h, 0px);
+}
+
+.section-ruler {
+    position: relative;
+    height: 28px;
+    overflow: hidden;
+    border-top: 1px solid var(--border-light);
+    background: var(--bg-primary);
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+    --sp: 120px;
+}
+
+.sr-track {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: calc(var(--sp) * var(--n-1));
+    will-change: transform;
+    /* 細刻度：每章節之間 5 格 */
+    background-image: repeating-linear-gradient(
+        to right,
+        var(--border-color) 0 1px,
+        transparent 1px calc(var(--sp) / 5)
+    );
+    background-size: calc(100% + 1px) 5px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+}
+
+.sr-label {
+    position: absolute;
+    top: 3px;
+    padding: 0 4px;
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: 0.66rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--text-light);
+    cursor: pointer;
+    transform-origin: 50% 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 主刻度：每個章節名稱下方較長的一條線 */
+.sr-label::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 1px;
+    height: 9px;
+    margin-top: 1px;
+    background: var(--border-color);
+}
+
+.sr-label.is-current {
+    color: var(--color-accent);
+}
+
+.sr-label.is-current::after {
+    background: var(--color-accent);
+}
+
+/* 中央指針 */
+.sr-pointer {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 2px;
+    height: 9px;
+    margin-left: -1px;
+    border-radius: 1px;
+    background: var(--color-accent);
+    pointer-events: none;
+}
+
+/* 電腦版：導覽列變薄，少佔畫面 */
+@media (min-width: 769px) {
+    .nav-content {
+        padding: 0.55rem 0;
+    }
+
+    .brand-name {
+        font-size: 1.2rem;
+        line-height: 1.3;
+    }
+
+    .brand-title {
+        font-size: 0.65rem;
+    }
+
+    .nav-menu a {
+        font-size: 0.92rem;
+    }
+
+    .section-ruler {
+        height: 26px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-ruler {
+        height: 26px;
+        --sp: 92px;
+    }
+
+    .sr-label {
+        font-size: 0.6rem;
+        top: 2px;
+    }
+}
+
+@media print {
+    .section-ruler {
+        display: none;
     }
 }

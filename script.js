@@ -702,3 +702,291 @@ function initializePage() {
     // 初始化統計數字動畫
     initStatsAnimation();
 }
+
+// ==================== 手機版長文字收合 ====================
+// 手機寬度時，摘要類長段落預設只顯示約 3 行，點「Read more」展開
+function initMobileReadMore() {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const selector = [
+        '.project-details > .detail-section:first-child > p',
+        '.pub-abstract',
+        '.patent-abstract',
+        '.column-text'
+    ].join(', ');
+    const items = Array.from(document.querySelectorAll(selector));
+    const buttons = new Map();
+
+    function getButton(el) {
+        let btn = buttons.get(el);
+        if (btn) return btn;
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'm-more';
+        btn.textContent = 'Read more';
+        btn.setAttribute('aria-expanded', 'false');
+        btn.addEventListener('click', () => {
+            const open = el.classList.contains('m-clamp');
+            el.classList.toggle('m-clamp', !open);
+            el.dataset.mOpen = open ? '1' : '';
+            btn.textContent = open ? 'Show less' : 'Read more';
+            btn.setAttribute('aria-expanded', String(open));
+        });
+        el.after(btn);
+        buttons.set(el, btn);
+        return btn;
+    }
+
+    function apply() {
+        items.forEach(el => {
+            const existing = buttons.get(el);
+            if (!mq.matches) {
+                el.classList.remove('m-clamp');
+                if (existing) existing.hidden = true;
+                return;
+            }
+            if (el.dataset.mOpen === '1') {
+                if (existing) existing.hidden = false;
+                return;
+            }
+            el.classList.add('m-clamp');
+            const overflows = el.scrollHeight > el.clientHeight + 4;
+            if (!overflows) {
+                el.classList.remove('m-clamp');
+                if (existing) existing.hidden = true;
+                return;
+            }
+            getButton(el).hidden = false;
+        });
+    }
+
+    apply();
+    mq.addEventListener('change', apply);
+}
+
+document.addEventListener('DOMContentLoaded', initMobileReadMore);
+
+// ==================== 手機版 Technical Expertise 收合卡片 ====================
+// 手機寬度時，每個分類只顯示標題與數量，點了才展開內容
+function initMobileExpertiseAccordion() {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const cards = Array.from(document.querySelectorAll('.expertise-category'));
+
+    cards.forEach(card => {
+        const title = card.querySelector('.category-title');
+        if (!title) return;
+        const n = card.querySelectorAll('.tech-badge, .skill-item').length;
+        const count = document.createElement('span');
+        count.className = 'm-acc-count';
+        count.textContent = n + (n === 1 ? ' item' : ' items');
+        count.hidden = true;
+        title.appendChild(count);
+
+        const toggle = () => {
+            if (!card.classList.contains('m-acc')) return;
+            const open = card.classList.toggle('open');
+            title.setAttribute('aria-expanded', String(open));
+        };
+        title.addEventListener('click', toggle);
+        title.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggle();
+            }
+        });
+    });
+
+    function apply() {
+        cards.forEach(card => {
+            const title = card.querySelector('.category-title');
+            const count = card.querySelector('.m-acc-count');
+            if (!title) return;
+            if (mq.matches) {
+                card.classList.add('m-acc');
+                title.setAttribute('role', 'button');
+                title.setAttribute('tabindex', '0');
+                title.setAttribute('aria-expanded', String(card.classList.contains('open')));
+                if (count) count.hidden = false;
+            } else {
+                card.classList.remove('m-acc', 'open');
+                title.removeAttribute('role');
+                title.removeAttribute('tabindex');
+                title.removeAttribute('aria-expanded');
+                if (count) count.hidden = true;
+            }
+        });
+    }
+
+    apply();
+    mq.addEventListener('change', apply);
+}
+
+document.addEventListener('DOMContentLoaded', initMobileExpertiseAccordion);
+
+// ==================== 手機版 Academic Objective 收合 ====================
+function initMobileGoalToggle() {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const box = document.querySelector('.academic-goal');
+    const title = box && box.querySelector('.goal-content h4');
+    if (!title) return;
+
+    const toggle = () => {
+        if (!box.classList.contains('m-goal')) return;
+        const open = box.classList.toggle('open');
+        title.setAttribute('aria-expanded', String(open));
+    };
+    title.addEventListener('click', toggle);
+    title.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+        }
+    });
+
+    function apply() {
+        if (mq.matches) {
+            box.classList.add('m-goal');
+            title.setAttribute('role', 'button');
+            title.setAttribute('tabindex', '0');
+            title.setAttribute('aria-expanded', String(box.classList.contains('open')));
+        } else {
+            box.classList.remove('m-goal', 'open');
+            title.removeAttribute('role');
+            title.removeAttribute('tabindex');
+            title.removeAttribute('aria-expanded');
+        }
+    }
+
+    apply();
+    mq.addEventListener('change', apply);
+}
+
+document.addEventListener('DOMContentLoaded', initMobileGoalToggle);
+
+// ==================== 章節刻度尺（相機變焦轉盤效果） ====================
+// 在導覽列下方放一條由左到右的刻度線；捲動時刻度連續滑動，
+// 最接近中央指針的章節名稱會放大、變色，讓讀者知道目前位置與後面還有什麼。
+function initSectionRuler() {
+    const nav = document.querySelector('.navbar');
+    const sections = Array.from(document.querySelectorAll('section[id]'));
+    if (!nav || sections.length < 2) return;
+
+    const names = {
+        overview: 'Overview',
+        awards: 'Awards',
+        research: 'Research',
+        publications: 'Publications',
+        experiences: 'Experiences',
+        patents: 'Patents',
+        expertise: 'Expertise',
+        laboratory: 'Laboratory',
+        contact: 'Contact'
+    };
+
+    const ruler = document.createElement('div');
+    ruler.className = 'section-ruler';
+    ruler.setAttribute('aria-label', 'Section progress');
+    ruler.style.setProperty('--n-1', sections.length - 1);
+
+    const track = document.createElement('div');
+    track.className = 'sr-track';
+
+    const labels = sections.map((section, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'sr-label';
+        btn.textContent = names[section.id] || section.id;
+        btn.style.left = `calc(var(--sp) * ${i})`;
+        btn.addEventListener('click', () => {
+            section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        track.appendChild(btn);
+        return btn;
+    });
+
+    const pointer = document.createElement('span');
+    pointer.className = 'sr-pointer';
+
+    ruler.append(track, pointer);
+    nav.appendChild(ruler);
+
+    let tops = [];
+    let spacing = 120;
+    let ticking = false;
+    let currentIndex = -1;
+
+    function measure() {
+        document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
+        tops = sections.map(s => s.getBoundingClientRect().top + window.scrollY);
+        spacing = parseFloat(getComputedStyle(ruler).getPropertyValue('--sp')) || 120;
+        update();
+    }
+
+    // 回傳連續位置：整數部分 = 章節索引，小數部分 = 在該章節內的進度
+    function smooth(t) {
+        return t * t * (3 - 2 * t);
+    }
+
+    // 章節內前 70% 只微微移動，最後 30% 才平滑轉到下一章（段位感）
+    function detent(frac) {
+        if (frac < 0.7) return (frac / 0.7) * 0.12;
+        return 0.12 + 0.88 * smooth((frac - 0.7) / 0.3);
+    }
+
+    function position() {
+        const ref = window.scrollY + 150; // 與 highlightNavigation 相同基準
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (window.scrollY >= maxScroll - 2) return sections.length - 1;
+        for (let i = tops.length - 1; i >= 0; i--) {
+            if (ref >= tops[i]) {
+                if (i === tops.length - 1) return i;
+                const frac = (ref - tops[i]) / (tops[i + 1] - tops[i]);
+                return i + detent(Math.min(Math.max(frac, 0), 1));
+            }
+        }
+        return 0;
+    }
+
+    function update() {
+        ticking = false;
+        const f = position();
+        track.style.transform = `translateX(${-f * spacing}px)`;
+
+        labels.forEach((label, i) => {
+            const d = Math.abs(i - f);
+            const near = Math.max(0, 1 - d);          // 1 = 正中央, 0 = 一格以外
+            const scale = 1 + 0.32 * near;
+            const opacity = Math.max(0.35, 1 - d * 0.3);
+            label.style.transform = `translateX(-50%) scale(${scale.toFixed(3)})`;
+            label.style.opacity = opacity.toFixed(2);
+        });
+
+        // 目前章節用無條件捨去，與導覽列高亮在同一刻切換
+        const idx = Math.min(labels.length - 1, Math.floor(f + 0.001));
+        if (idx !== currentIndex) {
+            if (labels[currentIndex]) {
+                labels[currentIndex].classList.remove('is-current');
+                labels[currentIndex].removeAttribute('aria-current');
+            }
+            labels[idx].classList.add('is-current');
+            labels[idx].setAttribute('aria-current', 'true');
+            currentIndex = idx;
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+        }
+    }, { passive: true });
+
+    window.addEventListener('resize', measure);
+    window.addEventListener('load', measure);
+    // 圖片延遲載入會改變章節位置，定期重新量測
+    if ('ResizeObserver' in window) {
+        new ResizeObserver(() => measure()).observe(document.body);
+    }
+    measure();
+}
+
+document.addEventListener('DOMContentLoaded', initSectionRuler);
