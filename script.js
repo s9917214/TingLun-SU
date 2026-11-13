@@ -911,17 +911,38 @@ function initSectionRuler() {
 
     let tops = [];
     let spacing = 120;
-    let ticking = false;
     let currentIndex = -1;
+    let shown = 0;          // 畫面上顯示的位置（平滑追趕 target）
+    let target = 0;         // 由捲動位置算出的目標位置
+    let rafId = 0;
+    let measureQueued = false;
+
+    // 拖曳刻度條的狀態
+    let dragging = false;
+    let dragMoved = false;
+    let dragStartX = 0;
+    let dragStartF = 0;
+    let lastX = 0;
+    let lastT = 0;
+    let velocity = 0;       // px / ms
+    const maxF = sections.length - 1;
 
     function measure() {
+        measureQueued = false;
         document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
         tops = sections.map(s => s.getBoundingClientRect().top + window.scrollY);
         spacing = parseFloat(getComputedStyle(ruler).getPropertyValue('--sp')) || 120;
-        update();
+        target = position();
+        render(target);
+        shown = target;
     }
 
-    // 回傳連續位置：整數部分 = 章節索引，小數部分 = 在該章節內的進度
+    function queueMeasure() {
+        if (measureQueued) return;
+        measureQueued = true;
+        requestAnimationFrame(measure);
+    }
+
     function smooth(t) {
         return t * t * (3 - 2 * t);
     }
@@ -932,10 +953,11 @@ function initSectionRuler() {
         return 0.12 + 0.88 * smooth((frac - 0.7) / 0.3);
     }
 
+    // 回傳連續位置：整數部分 = 章節索引，小數部分 = 在該章節內的進度
     function position() {
         const ref = window.scrollY + 150; // 與 highlightNavigation 相同基準
         const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-        if (window.scrollY >= maxScroll - 2) return sections.length - 1;
+        if (window.scrollY >= maxScroll - 2) return maxF;
         for (let i = tops.length - 1; i >= 0; i--) {
             if (ref >= tops[i]) {
                 if (i === tops.length - 1) return i;
@@ -946,13 +968,30 @@ function initSectionRuler() {
         return 0;
     }
 
-    function update() {
-        ticking = false;
-        const f = position();
-        track.style.transform = `translateX(${-f * spacing}px)`;
+    // 位置 → 頁面捲動高度（拖曳時用，線性對應）
+    function scrollForF(f) {
+        const i = Math.min(maxF, Math.max(0, Math.floor(f)));
+        const frac = f - i;
+        const top = i < maxF ? tops[i] + frac * (tops[i + 1] - tops[i]) : tops[i];
+        return Math.max(0, top - 150);
+    }
+
+    function render(f) {
+        track.style.transform = `translate3d(${(-f * spacing).toFixed(2)}px, 0, 0)`;
+        ruler.dataset.f = f.toFixed(4);
+        ruler.dataset.n = sections.length;
 
         labels.forEach((label, i) => {
             const d = Math.abs(i - f);
+            if (d > 3) {
+                if (label.dataset.far !== '1') {
+                    label.style.transform = 'translateX(-50%)';
+                    label.style.opacity = '0.35';
+                    label.dataset.far = '1';
+                }
+                return;
+            }
+            label.dataset.far = '';
             const near = Math.max(0, 1 - d);          // 1 = 正中央, 0 = 一格以外
             const scale = 1 + 0.32 * near;
             const opacity = Math.max(0.35, 1 - d * 0.3);
@@ -961,32 +1000,313 @@ function initSectionRuler() {
         });
 
         // 目前章節用無條件捨去，與導覽列高亮在同一刻切換
-        const idx = Math.min(labels.length - 1, Math.floor(f + 0.001));
+        const idx = Math.min(labels.length - 1, Math.max(0, Math.floor(f + 0.001)));
         if (idx !== currentIndex) {
             if (labels[currentIndex]) {
                 labels[currentIndex].classList.remove('is-current');
                 labels[currentIndex].removeAttribute('aria-current');
             }
             labels[idx].classList.add('is-current');
+            ruler.dataset.current = sections[idx].id;
             labels[idx].setAttribute('aria-current', 'true');
             currentIndex = idx;
         }
     }
 
-    window.addEventListener('scroll', () => {
-        if (!ticking) {
-            ticking = true;
-            requestAnimationFrame(update);
+    // 每一幀讓顯示位置平滑追上目標，避免捲動事件不均勻造成的頓挫
+    function tick() {
+        rafId = 0;
+        if (!dragging) target = position();
+        const diff = target - shown;
+        if (Math.abs(diff) < 0.0005) {
+            shown = target;
+        } else {
+            shown += diff * (dragging ? 0.5 : 0.22);
         }
-    }, { passive: true });
-
-    window.addEventListener('resize', measure);
-    window.addEventListener('load', measure);
-    // 圖片延遲載入會改變章節位置，定期重新量測
-    if ('ResizeObserver' in window) {
-        new ResizeObserver(() => measure()).observe(document.body);
+        render(shown);
+        if (shown !== target) rafId = requestAnimationFrame(tick);
     }
+
+    function kick() {
+        if (!rafId) rafId = requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', queueMeasure);
+    window.addEventListener('load', measure);
+    // 圖片延遲載入會改變章節位置，重新量測（合併到下一幀，避免頻繁計算）
+    if ('ResizeObserver' in window) {
+        new ResizeObserver(queueMeasure).observe(document.body);
+    }
+
+    // ---------- 直接拖曳刻度條 ----------
+    // 左右滑動刻度條＝前後切換章節；放開時依滑動速度吸附到最近的章節
+    ruler.addEventListener('pointerdown', e => {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        // 電腦版刻度改由選單＋粒子線呈現，只在手機開放拖曳
+        if (window.matchMedia('(min-width: 769px)').matches) return;
+        dragging = true;
+        dragMoved = false;
+        dragStartX = lastX = e.clientX;
+        lastT = performance.now();
+        velocity = 0;
+        dragStartF = shown;
+        target = shown;
+    });
+
+    ruler.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const dx = e.clientX - dragStartX;
+        if (!dragMoved && Math.abs(dx) > 6) {
+            dragMoved = true;
+            ruler.classList.add('is-dragging');
+            try { ruler.setPointerCapture(e.pointerId); } catch (_) { /* ignore */ }
+        }
+        if (!dragMoved) return;
+        const now = performance.now();
+        const dt = Math.max(1, now - lastT);
+        velocity = 0.8 * velocity + 0.2 * ((e.clientX - lastX) / dt);
+        lastX = e.clientX;
+        lastT = now;
+
+        target = Math.min(maxF, Math.max(0, dragStartF - dx / spacing));
+        window.scrollTo({ top: scrollForF(target), behavior: 'instant' });
+        kick();
+    });
+
+    function endDrag() {
+        if (!dragging) return;
+        dragging = false;
+        ruler.classList.remove('is-dragging');
+        if (!dragMoved) return;
+        // 依甩動速度往前／往後多推一點，再吸附到最近的章節
+        const projected = target - (velocity * 180) / spacing;
+        const snap = Math.min(maxF, Math.max(0, Math.round(projected)));
+        sections[snap].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    ruler.addEventListener('pointerup', endDrag);
+    ruler.addEventListener('pointercancel', endDrag);
+
+    // 拖曳後放開不要觸發標籤的點擊
+    ruler.addEventListener('click', e => {
+        if (dragMoved) {
+            e.stopPropagation();
+            e.preventDefault();
+            dragMoved = false;
+        }
+    }, true);
+
     measure();
 }
 
 document.addEventListener('DOMContentLoaded', initSectionRuler);
+
+
+// ==================== 電腦版：刻度尺 → 選單的粒子連線 ====================
+// 電腦版刻度尺不顯示文字，改由中央指針放出一道粒子流，
+// 沿曲線飛向上方選單中「目前章節」的文字；換章節時連線平滑移到下一個項目。
+function initRulerParticles() {
+    const nav = document.querySelector('.navbar');
+    const ruler = nav && nav.querySelector('.section-ruler');
+    if (!ruler) return;
+
+    const desktop = window.matchMedia('(min-width: 769px)');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const canvas = document.createElement('canvas');
+    canvas.className = 'ruler-particles';
+    canvas.setAttribute('aria-hidden', 'true');
+    nav.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+
+    const ACCENT = '52, 152, 219';
+    const particles = Array.from({ length: 22 }, (_, i) => ({
+        t: i / 22,
+        speed: 0.0045 + Math.random() * 0.0045,
+        r: 0.9 + Math.random() * 1.1,
+        wobble: Math.random() * Math.PI * 2
+    }));
+
+    let w = 0, h = 0, dpr = 1;
+    let tx = null, ty = null;      // 目前連線終點（平滑追蹤）
+    let alpha = 0;                 // 連線整體透明度（平滑淡入淡出）
+    let running = false;
+
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = nav.clientWidth;
+        h = nav.clientHeight;
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function targetPoint() {
+        const id = ruler.dataset.current;
+        const link = id && nav.querySelector(`.nav-menu a[href="#${id}"]`);
+        if (!link) return null;
+        const navBox = nav.getBoundingClientRect();
+        const box = link.getBoundingClientRect();
+        return {
+            x: box.left + box.width / 2 - navBox.left,
+            y: box.bottom - navBox.top + 7
+        };
+    }
+
+    // 每個章節刻度的 x：有選單項目的對齊項目中心；
+    // 沒有選單項目的章節（例如 Experiences）放在前後兩個項目中間
+    function tickPositions(navBox) {
+        const ids = Array.from(document.querySelectorAll('section[id]')).map(sec => sec.id);
+        const xs = ids.map(id => {
+            const link = nav.querySelector(`.nav-menu a[href="#${id}"]`);
+            if (!link) return null;
+            const b = link.getBoundingClientRect();
+            return b.left + b.width / 2 - navBox.left;
+        });
+        for (let i = 0; i < xs.length; i++) {
+            if (xs[i] !== null) continue;
+            let a = i - 1, b = i + 1;
+            while (a >= 0 && xs[a] === null) a--;
+            while (b < xs.length && xs[b] === null) b++;
+            const left = a >= 0 ? xs[a] : (b < xs.length ? xs[b] - 60 : 0);
+            const right = b < xs.length ? xs[b] : left + 60;
+            xs[i] = left + (right - left) * ((i - a) / (b - a));
+        }
+        return xs;
+    }
+
+    function bezier(p0, p1, p2, p3, t) {
+        const u = 1 - t;
+        return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+    }
+
+    function frame() {
+        running = false;
+        if (!desktop.matches) {
+            ctx.clearRect(0, 0, w, h);
+            return;
+        }
+
+        const navBox = nav.getBoundingClientRect();
+        const rBox = ruler.getBoundingClientRect();
+        const content = nav.querySelector('.nav-content') || ruler;
+        const cBox = content.getBoundingClientRect();
+
+        // 電腦版刻度尺：每個章節的刻度對齊上方選單項目的正下方，
+        // 起點依閱讀進度在刻度之間由左往右移動
+        const lx = cBox.left - navBox.left;
+        const lw = cBox.width;
+        const ly = rBox.top - navBox.top + rBox.height / 2;
+        const f = parseFloat(ruler.dataset.f) || 0;
+        const xs = tickPositions(navBox);
+        const n = xs.length;
+        const fi = Math.min(n - 1, Math.floor(f));
+        const sx = fi >= n - 1 ? xs[n - 1] : xs[fi] + (f - fi) * (xs[fi + 1] - xs[fi]);
+        const sy = ly;
+        const target = targetPoint();
+        if (target) {
+            if (tx === null) { tx = target.x; ty = target.y; }
+            tx += (target.x - tx) * 0.12;
+            ty += (target.y - ty) * 0.12;
+        }
+        alpha += ((target ? 1 : 0) - alpha) * 0.1;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 底線、已讀進度、章節刻度
+        const base = ctx.createLinearGradient(lx, 0, lx + lw, 0);
+        base.addColorStop(0, 'rgba(203, 213, 225, 0)');
+        base.addColorStop(Math.max(0, (xs[0] - lx) / lw - 0.08), 'rgba(203, 213, 225, 0)');
+        base.addColorStop(Math.max(0, (xs[0] - lx) / lw), 'rgba(203, 213, 225, 0.9)');
+        base.addColorStop(1, 'rgba(203, 213, 225, 0.9)');
+        ctx.fillStyle = base;
+        ctx.fillRect(lx, ly - 0.5, Math.max(0, xs[n - 1] - lx), 1);
+        const prog = ctx.createLinearGradient(xs[0], 0, Math.max(sx, xs[0] + 1), 0);
+        prog.addColorStop(0, `rgba(${ACCENT}, 0.25)`);
+        prog.addColorStop(1, `rgba(${ACCENT}, 0.9)`);
+        ctx.fillStyle = prog;
+        ctx.fillRect(xs[0], ly - 1, Math.max(0, sx - xs[0]), 2);
+        for (let i = 0; i < n; i++) {
+            const x = xs[i];
+            const passed = i <= f + 0.001;
+            ctx.fillStyle = passed ? `rgba(${ACCENT}, 0.85)` : 'rgba(148, 163, 184, 0.7)';
+            ctx.fillRect(Math.round(x) - 0.5, ly - 3.5, 1, 7);
+        }
+
+        // 起點亮點（會往右移動）
+        ctx.beginPath();
+        ctx.arc(sx, sy, 3.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${ACCENT}, 1)`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(sx, sy, 6, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${ACCENT}, 0.15)`;
+        ctx.fill();
+
+        if (tx === null || alpha < 0.01) {
+            schedule();
+            return;
+        }
+
+        // 曲線：從指針往上，再彎向選單文字
+        const c1x = sx, c1y = sy - (sy - ty) * 0.8;
+        const c2x = tx, c2y = ty + (sy - ty) * 0.6;
+
+        // 淡淡的導引線
+        const grad = ctx.createLinearGradient(sx, sy, tx, ty);
+        grad.addColorStop(0, `rgba(${ACCENT}, ${0.05 * alpha})`);
+        grad.addColorStop(1, `rgba(${ACCENT}, ${0.35 * alpha})`);
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.bezierCurveTo(c1x, c1y, c2x, c2y, tx, ty);
+        ctx.strokeStyle = grad;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // 粒子
+        const animate = !reduced.matches;
+        particles.forEach(p => {
+            if (animate) {
+                p.t += p.speed;
+                if (p.t > 1) p.t -= 1;
+                p.wobble += 0.08;
+            }
+            const x = bezier(sx, c1x, c2x, tx, p.t);
+            const y = bezier(sy, c1y, c2y, ty, p.t) + Math.sin(p.wobble) * 0.8;
+            const a = Math.sin(Math.PI * p.t) * 0.85 * alpha;
+            ctx.beginPath();
+            ctx.arc(x, y, p.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${ACCENT}, ${a.toFixed(3)})`;
+            ctx.fill();
+        });
+
+        // 兩端亮點
+        ctx.beginPath();
+        ctx.arc(tx, ty, 2.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${ACCENT}, ${0.9 * alpha})`;
+        ctx.fill();
+
+        if (animate) schedule();
+    }
+
+    function schedule() {
+        if (running || document.hidden || !desktop.matches) return;
+        running = true;
+        requestAnimationFrame(frame);
+    }
+
+    resize();
+    schedule();
+    window.addEventListener('resize', () => { resize(); schedule(); });
+    window.addEventListener('scroll', schedule, { passive: true });
+    document.addEventListener('visibilitychange', schedule);
+    desktop.addEventListener('change', () => { resize(); tx = null; schedule(); frame(); });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 等刻度尺建立後再啟動
+    requestAnimationFrame(initRulerParticles);
+});
