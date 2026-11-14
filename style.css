@@ -191,16 +191,35 @@ body {
 }
 
 .researcher-tag {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.3rem 1rem 0.3rem 0.3rem;
+    margin-top: 0.85rem;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.02));
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.tag-degree {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
     background: var(--color-accent);
     color: var(--text-inverse);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 6px rgba(52, 152, 219, 0.35);
+}
+
+.tag-field {
+    color: var(--color-primary);
+    font-size: 0.88rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.3px;
 }
 
 .researcher-name {
@@ -208,14 +227,25 @@ body {
     font-size: 3rem;
     font-weight: 400;
     color: var(--color-primary);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0;
     line-height: 1.2;
 }
 
 .name-en {
+    margin-left: 0.35rem;
     font-size: 1.5rem;
     color: var(--text-secondary);
     font-style: italic;
+    white-space: nowrap;
+}
+
+/* 姓名區：名字下方緊接學位標籤，像副標題 */
+.hero-head {
+    margin-bottom: var(--spacing-lg);
+}
+
+.hero-title {
+    min-width: 0;
 }
 
 .research-interests {
@@ -306,8 +336,10 @@ body {
 }
 
 .stat-label {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-primary);
     margin-top: 0.25rem;
 }
 
@@ -2856,9 +2888,18 @@ button,
     }
 
     .researcher-tag {
+        gap: 0.45rem;
+        padding: 0.2rem 0.7rem 0.2rem 0.2rem;
+        margin-top: 0.45rem;
+    }
+
+    .tag-degree {
         font-size: 0.66rem;
-        padding: 0.3rem 0.6rem;
-        margin-bottom: 0.7rem;
+        padding: 0.15rem 0.5rem;
+    }
+
+    .tag-field {
+        font-size: 0.74rem;
     }
 
     .hero-head {
@@ -2880,7 +2921,7 @@ button,
     }
 
     .researcher-name {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
         margin-bottom: 0;
     }
 
@@ -2900,24 +2941,22 @@ button,
         margin-bottom: 0.45rem;
     }
 
-    .interests-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-    }
-
+    /* 研究興趣：與電腦版相同的細線條列 */
     .interests-list li {
-        padding: 0.3rem 0.7rem;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-light);
-        border-radius: 999px;
-        font-size: 0.78rem;
-        line-height: 1.35;
+        padding: 0.18rem 0 0.18rem 1.3rem;
+        font-size: 0.86rem;
+        line-height: 1.45;
         color: var(--color-primary);
     }
 
     .interests-list li::before {
-        content: none;
+        content: '';
+        top: 0.85em;
+        width: 0.75rem;
+        height: 2px;
+        margin-top: -1px;
+        border-radius: 1px;
+        background: linear-gradient(90deg, var(--color-accent), rgba(52, 152, 219, 0.35));
     }
 
     .academic-goal {
@@ -2938,44 +2977,6 @@ button,
     .goal-content p {
         font-size: 0.85rem;
         line-height: 1.55;
-    }
-
-    /* Academic Objective：只顯示標題，點了才展開（JS 加上 .m-goal） */
-    .academic-goal.m-goal {
-        padding: 0;
-    }
-
-    .academic-goal.m-goal .goal-content {
-        flex: 1;
-    }
-
-    .m-goal .goal-content h4 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0;
-        padding: 0.7rem 0.9rem;
-        cursor: pointer;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-    }
-
-    .m-goal .goal-content h4::after {
-        content: '▾';
-        color: var(--color-accent);
-        font-size: 0.8rem;
-    }
-
-    .m-goal.open .goal-content h4::after {
-        content: '▴';
-    }
-
-    .m-goal:not(.open) .goal-content p {
-        display: none;
-    }
-
-    .m-goal.open .goal-content p {
-        padding: 0 0.9rem 0.75rem;
     }
 
     /* 四個數字：一條整合的數據帶，中間細分隔線 */
@@ -3017,12 +3018,10 @@ button,
     }
 
     .stat-label {
-        margin-top: 0.35rem;
-        font-size: 0.58rem;
-        font-weight: 600;
-        line-height: 1.25;
-        text-transform: uppercase;
-        letter-spacing: 0.4px;
+        margin-top: 0.3rem;
+        font-size: 0.74rem;
+        line-height: 1.2;
+        letter-spacing: 0;
     }
 
     /* 聯絡資訊：地點一行 + 四個圖示按鈕 */
@@ -3691,5 +3690,245 @@ section[id] {
 @media print {
     .section-ruler {
         display: none;
+    }
+}
+
+/* ==================== 電腦版 Overview 緊湊化 ==================== */
+@media (min-width: 769px) {
+    .top-bar {
+        padding: 0.4rem 0;
+        font-size: 0.8rem;
+    }
+
+    .overview-section {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .overview-grid {
+        gap: 2.5rem;
+    }
+
+    .researcher-name {
+        font-size: 2.6rem;
+    }
+
+    .name-en {
+        font-size: 1.3rem;
+    }
+
+    .researcher-tag {
+        margin-top: 0.5rem;
+    }
+
+    .hero-head {
+        margin-bottom: 1.1rem;
+    }
+
+    /* 研究興趣：細線條列（取代膠囊），更精緻也更緊湊 */
+    .research-interests {
+        margin-bottom: 1rem;
+    }
+
+    .research-interests h3 {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--text-secondary);
+        margin-bottom: 0.4rem;
+    }
+
+    .interests-list li {
+        padding: 0.22rem 0 0.22rem 1.5rem;
+        font-size: 0.98rem;
+        line-height: 1.5;
+        color: var(--color-primary);
+    }
+
+    .interests-list li::before {
+        content: '';
+        top: 50%;
+        width: 0.85rem;
+        height: 2px;
+        margin-top: -1px;
+        border-radius: 1px;
+        background: linear-gradient(90deg, var(--color-accent), rgba(52, 152, 219, 0.35));
+    }
+
+    .academic-goal {
+        padding: 1rem 1.25rem;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .goal-content h4 {
+        margin-bottom: 0.25rem;
+    }
+
+    .goal-content p {
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    /* 四個數字：整合成一條數據帶 */
+    .quick-stats {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0;
+        padding: 0.8rem 0.5rem;
+        background: var(--bg-primary);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        border-top: 3px solid var(--color-accent);
+    }
+
+    .stat-item {
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 0.1rem 0.4rem;
+        background: none;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .stat-item + .stat-item {
+        border-left: 1px solid var(--border-light);
+    }
+
+    .stat-value {
+        font-size: 1.7rem;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        line-height: 1.25;
+        white-space: nowrap;
+    }
+
+    /* 右側個人卡 */
+    .profile-card {
+        padding: 1.1rem 1.4rem;
+        top: 100px;
+    }
+
+    .profile-image {
+        margin-bottom: 0.75rem;
+    }
+
+    .profile-photo {
+        width: 128px;
+        height: 128px;
+    }
+
+    .contact-info {
+        margin-bottom: 0.85rem;
+    }
+
+    .contact-info h4 {
+        margin-bottom: 0.3rem;
+    }
+
+    .info-item {
+        padding: 0.38rem 0;
+    }
+
+    .cv-download-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-download-cv {
+        padding: 0.65rem;
+    }
+}
+
+/* ==================== Academic Objective 收合 ==================== */
+/* Academic Objective：只顯示標題，點了才展開（手機、電腦皆適用，JS 加上 .m-goal） */
+.academic-goal.m-goal {
+    padding: 0 0 0 1.25rem;
+    gap: 0.75rem;
+}
+
+.m-goal .goal-icon {
+    display: flex;
+    align-self: flex-start;
+    padding-top: 0.8rem;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.m-goal:not(.open) .goal-icon {
+    align-self: center;
+    padding-top: 0;
+}
+
+.academic-goal.m-goal .goal-content {
+    flex: 1;
+}
+
+.m-goal .goal-content h4 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0.75rem 1.25rem 0.75rem 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.m-goal .goal-content h4::after {
+    content: '▾';
+    color: var(--color-accent);
+    font-size: 0.8rem;
+}
+
+.m-goal.open .goal-content h4::after {
+    content: '▴';
+}
+
+.m-goal:not(.open) .goal-content p {
+    display: none;
+}
+
+.m-goal.open .goal-content p {
+    padding: 0 1.25rem 0.85rem 0;
+}
+
+/* 手機版：圖示隱藏，左側留白縮小（需放在上方全域規則之後才會生效） */
+@media (max-width: 768px) {
+    .academic-goal.m-goal {
+        padding: 0 0 0 0.9rem;
+    }
+
+    .m-goal .goal-icon {
+        display: none;
+    }
+}
+
+/* ==================== 電腦版 Overview：左欄撐滿，與右側卡片上下對齊 ==================== */
+@media (min-width: 769px) {
+    .overview-grid {
+        align-items: stretch;
+    }
+
+    .overview-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    /* 間距交給 space-between 平均分配 */
+    .overview-content > .hero-head,
+    .overview-content > .research-interests,
+    .overview-content > .academic-goal {
+        margin-bottom: 0;
+    }
+
+    .interests-list li {
+        padding-top: 0.3rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .overview-sidebar {
+        align-self: start;
     }
 }

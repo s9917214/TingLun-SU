@@ -824,7 +824,8 @@ document.addEventListener('DOMContentLoaded', initMobileExpertiseAccordion);
 
 // ==================== 手機版 Academic Objective 收合 ====================
 function initMobileGoalToggle() {
-    const mq = window.matchMedia('(max-width: 768px)');
+    // 手機、電腦都預設收合（原本只有手機）
+    const mq = { matches: true, addEventListener() {} };
     const box = document.querySelector('.academic-goal');
     const title = box && box.querySelector('.goal-content h4');
     if (!title) return;
